@@ -15,6 +15,8 @@
     "test:supabase": "pnpm --filter @lostbox/web test:supabase",
     "db:status": "supabase migration list --linked",
     "db:push": "supabase db push --linked",
+    "db:push:dry": "supabase db push --linked --dry-run",
+    "smoke": "pnpm --filter @lostbox/web smoke",
     "test:e2e": "pnpm --filter @lostbox/web test:e2e"
   },
   "devDependencies": {
