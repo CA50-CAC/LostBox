@@ -1,3 +1,4 @@
+import { PrivacyLink } from "@/components/privacy-link";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Logo } from "@/components/logo";
@@ -70,6 +71,7 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
           </Alert>
         ) : null}
         {children}
+        <PrivacyLink className="mt-auto pt-2" />
       </main>
       <TabBar tabs={tabs} label={t("nav.staffNav")} />
     </div>

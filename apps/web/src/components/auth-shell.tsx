@@ -1,3 +1,4 @@
+import { PrivacyLink } from "@/components/privacy-link";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { t } from "@/lib/i18n";
@@ -19,6 +20,7 @@ export function AuthShell({ title, lead, children }: { title: string; lead?: str
           </div>
           <div className="flex flex-col gap-4">{children}</div>
         </div>
+        <PrivacyLink className="mt-auto pt-2" />
       </main>
     </div>
   );
