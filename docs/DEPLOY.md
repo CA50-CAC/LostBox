@@ -116,10 +116,32 @@ update public.schools
 4. Approve the claim, then mark it picked up.
 5. Check `https://<APP_URL>/s/<slug>` returns `X-Robots-Tag: noindex`.
 
+## 6. Photo retention job (daily)
+
+Photos of resolved items (returned, donated, removed) are deleted after the
+school's retention period (default 7 days). The item row stays, without a photo.
+The job lives at `/api/cron/retention`, and `apps/web/vercel.json` schedules it
+for **10:00 UTC every day** (about 2 to 3 a.m. in California).
+
+- **`CRON_SECRET` (secret, Production only):** a random string of at least 16
+  characters (`node -e "console.log(crypto.randomBytes(32).toString('base64url'))"`).
+  Mark it **Sensitive**. Vercel sends it as `Authorization: Bearer <CRON_SECRET>`
+  when it calls the job; any other call gets `401`. If it's missing, the job
+  answers `503` and does nothing, so photos are kept, not leaked.
+- **Hobby plan limits** ([Vercel docs](https://vercel.com/docs/cron-jobs/usage-and-pricing)):
+  cron jobs can run at most once a day, and Vercel may run them any time within
+  the scheduled hour. A daily job with a 7-day window doesn't need more.
+- **Check it ran:** Vercel → Project → Settings → Cron Jobs shows each run and
+  has a **Run** button. The response is just counts, e.g. `{"deleted":2,"failed":0}`.
+  Each deletion is also in the school's audit log as `photo.deleted`.
+- **Run it by hand** (e.g. locally): `curl -H "Authorization: Bearer $CRON_SECRET" <APP_URL>/api/cron/retention`.
+- Cron jobs only run on production deployments, not previews.
+
 ## What CI checks before you deploy
 
 - `check`: typecheck, lint, unit and database tests (PGlite).
-- `secrets`: a production build with the Supabase adapter and a fake secret key,
-  then a scan that fails if the key appears in any file served to browsers.
+- `secrets`: a production build with the Supabase adapter and fake secrets
+  (Supabase key, session secret, cron secret), then a scan that fails if any of
+  them appears in a file served to browsers.
 - `e2e`: Playwright against a production build with the demo school (the full
   loop, privacy rules, wizard resume, and axe accessibility checks).

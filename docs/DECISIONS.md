@@ -150,4 +150,12 @@ Found while reviewing `0001_init.sql` before its first push. Fixed in `0001` its
 
 ### 2026-10-01: Out of scope, as agreed
 
-AI matching, auto-fill, auto-blur, notifications, analytics, lost-item reports, the platform approval page, the poster page, the donate list, the retention job (the data-layer methods for it exist and are tested), logo upload, location "nearby" links UI, and QR codes on the launch screen.
+AI matching, auto-fill, auto-blur, notifications, analytics, lost-item reports, the platform approval page, the poster page, logo upload, location "nearby" links UI, and QR codes on the launch screen.
+
+### 2026-10-04: Photo retention job and "Ready to donate"
+
+- **Retention:** a daily Vercel Cron call to `/api/cron/retention` (10:00 UTC). It lists photos past each school's retention period (`listExpiredPhotos`), deletes the file (Supabase Storage, or `.data/uploads` locally), then clears the path (`clearPhoto`, which now also writes a `photo.deleted` audit entry with no actor). File first, database second, so a failed delete is retried the next day instead of leaving an orphan. The route needs `Authorization: Bearer <CRON_SECRET>` (compared in constant time); without `CRON_SECRET` set it refuses everything (503) rather than running open. The secret scan in CI now checks the session and cron secrets too.
+- **Why daily:** Vercel Hobby allows cron at most once a day, with timing anywhere in the hour. A 7-day retention window doesn't need more. Alternatives: Supabase `pg_cron` (can't delete Storage files from SQL safely), a GitHub Actions schedule (another place to keep the secret).
+- **Supabase Storage deletes now report errors.** Before, a failed delete was silent. The item edit page still ignores them (it's cleanup of a file nothing points at), but the retention job counts them as failed and retries.
+- **Ready to donate** (`/admin/donate`): available items found more than the school's donate-after days ago, oldest first. Items with a pending claim are held back (a student is waiting on them) and counted in a note. Staff tick items or "select all", press "Mark N donated", and confirm inline. The server recomputes the list and refuses the whole batch if any id isn't on it, so a stale page or a tampered form can't donate a claimed item or another school's item. Each item gets an `item.donated` audit entry (existing `setItemStatus`). Any staff member can do it, the same as changing an item's status. No schema change.
+
