@@ -53,13 +53,14 @@ test("the dashboard has no student details in it", async ({ page }) => {
   for (const secret of ["lock screen", "initials", "Lucky", "R. Ortiz", "golden retriever", "office safe"]) expect(html).not.toContain(secret);
 });
 
-test("the dashboard works in dark mode on a phone", async ({ browser }) => {
-  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, colorScheme: "dark" });
+test("the dashboard works in dark mode on a small phone", async ({ browser }) => {
+  // 320px: the narrowest common phone, so wider fonts on other machines still fit.
+  const ctx = await browser.newContext({ viewport: { width: 320, height: 700 }, isMobile: true, colorScheme: "dark" });
   const page = await ctx.newPage();
   await signIn(page, DEMO_STAFF, "/admin/stats");
   await expect(page.getByRole("heading", { name: "Impact", level: 1 })).toBeVisible();
   expect(await axe(page)).toEqual([]);
   const width = await page.evaluate(() => document.documentElement.scrollWidth);
-  expect(width).toBeLessThanOrEqual(390);
+  expect(width).toBeLessThanOrEqual(320);
   await ctx.close();
 });

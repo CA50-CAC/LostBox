@@ -52,7 +52,7 @@ export function WeeklyChart({ weeks, capped }: { weeks: WeekBucket[]; capped: bo
           ))}
           <span aria-hidden className="absolute inset-x-0 bottom-0 border-t border-muted/50" />
           <ol aria-label={t("stats.chart.title")} className="absolute inset-0 flex items-end">
-            {weeks.map((w) => (
+            {weeks.map((w, i) => (
               <li key={w.week} className="flex h-full flex-1 items-end justify-center px-px">
                 {/* A button only so the value can be reached with the keyboard; pressing it does nothing. */}
                 <button
@@ -67,7 +67,10 @@ export function WeeklyChart({ weeks, capped }: { weeks: WeekBucket[]; capped: bo
                   />
                   <span
                     aria-hidden
-                    className="pointer-events-none absolute bottom-full z-10 mb-1 rounded-lg bg-foreground px-2 py-1 text-xs font-semibold whitespace-nowrap text-background opacity-0 shadow-md transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
+                    // Anchored toward the middle of the chart so it never sticks out past the edge.
+                    className={`pointer-events-none invisible absolute bottom-full z-10 mb-1 rounded-lg bg-foreground px-2 py-1 text-xs font-semibold whitespace-nowrap text-background shadow-md group-hover:visible group-focus-visible:visible ${
+                      i < weeks.length / 2 ? "left-0" : "right-0"
+                    }`}
                     style={{ bottom: `${(w.returned / top) * 100}%` }}
                   >
                     {dayLabel(w.week)} · {t("stats.chart.value", { count: w.returned })}
