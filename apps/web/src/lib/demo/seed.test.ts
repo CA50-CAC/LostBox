@@ -6,7 +6,7 @@ import type { PGlite } from "@electric-sql/pglite";
 import { openPglite } from "@/lib/db/pglite";
 import { createPgliteRepositories } from "@/lib/repo/pglite";
 import { DEMO_JOIN_CODE } from "./constants";
-import { DEMO_DONATE_AFTER_DAYS, DEMO_ITEMS, DEMO_SCHOOL_ID, seedDemo } from "./seed";
+import { DEMO_DONATE_AFTER_DAYS, DEMO_HISTORY, DEMO_ITEMS, DEMO_SCHOOL_ID, seedDemo } from "./seed";
 
 let db: PGlite;
 let uploads: string;
@@ -22,14 +22,15 @@ afterAll(async () => {
   await rm(uploads, { recursive: true, force: true });
 });
 
+const OPEN = "status = 'available'";
 const count = async (sql: string) => Number((await db.query<{ n: number }>(sql, [DEMO_SCHOOL_ID])).rows[0].n);
 
 describe("demo seed", () => {
   it("has about 24 items across every category and all three privacy levels", async () => {
-    expect(await count("select count(*)::int as n from public.items where school_id = $1")).toBe(24);
-    expect(await count("select count(distinct category)::int as n from public.items where school_id = $1")).toBe(14);
-    expect(await count("select count(*)::int as n from public.items where school_id = $1 and visibility = 'limited'")).toBeGreaterThanOrEqual(5);
-    expect(await count("select count(*)::int as n from public.items where school_id = $1 and visibility = 'staff_only'")).toBeGreaterThanOrEqual(2);
+    expect(await count(`select count(*)::int as n from public.items where school_id = $1 and ${OPEN}`)).toBe(24);
+    expect(await count(`select count(distinct category)::int as n from public.items where school_id = $1 and ${OPEN}`)).toBe(14);
+    expect(await count(`select count(*)::int as n from public.items where school_id = $1 and ${OPEN} and visibility = 'limited'`)).toBeGreaterThanOrEqual(5);
+    expect(await count(`select count(*)::int as n from public.items where school_id = $1 and ${OPEN} and visibility = 'staff_only'`)).toBeGreaterThanOrEqual(2);
   });
 
   it("includes the confusable groups", () => {
@@ -42,7 +43,7 @@ describe("demo seed", () => {
 
   it("has at least 3 items past the donate-after limit, all within 30 days", async () => {
     const old = await count(
-      `select count(*)::int as n from public.items where school_id = $1 and found_at < now() - interval '${DEMO_DONATE_AFTER_DAYS} days'`,
+      `select count(*)::int as n from public.items where school_id = $1 and ${OPEN} and found_at < now() - interval '${DEMO_DONATE_AFTER_DAYS} days'`,
     );
     expect(old).toBeGreaterThanOrEqual(3);
     expect(await count("select count(*)::int as n from public.items where school_id = $1 and found_at < now() - interval '31 days'")).toBe(0);
@@ -59,14 +60,23 @@ describe("demo seed", () => {
     }
   });
 
+  it("has a month of returned and donated history, with no photos and no open claims", async () => {
+    const returned = DEMO_HISTORY.filter((h) => h.outcome === "returned").length;
+    expect(await count("select count(*)::int as n from public.items where school_id = $1 and status = 'returned' and resolved_at is not null")).toBe(returned);
+    expect(await count("select count(*)::int as n from public.items where school_id = $1 and status = 'donated'")).toBe(DEMO_HISTORY.length - returned);
+    expect(await count("select count(*)::int as n from public.items where school_id = $1 and status <> 'available' and photo_path is not null")).toBe(0);
+    expect(await count("select count(*)::int as n from public.claims where school_id = $1 and status = 'picked_up'")).toBe(returned);
+    expect(await count("select count(*)::int as n from public.items where school_id = $1 and resolved_at > now()")).toBe(0);
+  });
+
   it("writes one SVG per item", async () => {
     expect((await readdir(path.join(uploads, DEMO_SCHOOL_ID))).length).toBe(24);
   });
 
   it("is idempotent: running it again gives the same state, same school id", async () => {
     await seedDemo(db, uploads);
-    expect(await count("select count(*)::int as n from public.items where school_id = $1")).toBe(24);
+    expect(await count("select count(*)::int as n from public.items where school_id = $1")).toBe(24 + DEMO_HISTORY.length);
     expect(await count("select count(*)::int as n from public.schools where id = $1")).toBe(1);
-    expect(await count("select count(*)::int as n from public.claims where school_id = $1")).toBe(1);
+    expect(await count("select count(*)::int as n from public.claims where school_id = $1 and status = 'pending'")).toBe(1);
   });
 });

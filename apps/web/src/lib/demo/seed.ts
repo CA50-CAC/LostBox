@@ -14,6 +14,11 @@
  *   cases, 3 calculators
  * - found dates over the last 30 days, 3 of them past the donate-after limit
  * - simple generated SVG pictures (src/lib/demo/images.ts), no real photos
+ *
+ * Plus a short history (DEMO_HISTORY): items already returned or donated over
+ * the last month, so the impact dashboard (/admin/stats) has something to show.
+ * They're resolved, so students never see them, and they have no photos (the
+ * retention job would have deleted them by now anyway).
  */
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -74,7 +79,34 @@ export const DEMO_ITEMS: DemoItem[] = [
   { category: "clothing", colors: ["blue"], note: "Denim jacket, pins on the collar", location: "Cafeteria", daysAgo: 17 },
 ];
 
+/** Already resolved items. `hours` is the time from logging to pickup or donation. */
+interface DemoHistoryItem {
+  category: Category;
+  colors: Color[];
+  location: string;
+  daysAgo: number;
+  hours: number;
+  outcome: "returned" | "donated";
+  /** What the student said in the claim (returned items only). */
+  claim?: string;
+}
+
+export const DEMO_HISTORY: DemoHistoryItem[] = [
+  { category: "clothing", colors: ["black"], location: "Gym", daysAgo: 29, hours: 26, outcome: "returned", claim: "Black track jacket with my team number, 12" },
+  { category: "bottle_lunchbox", colors: ["blue"], location: "Cafeteria", daysAgo: 27, hours: 5, outcome: "returned", claim: "Blue lunchbox with a dinosaur sticker" },
+  { category: "electronics", colors: ["black"], location: "Library", daysAgo: 24, hours: 3, outcome: "returned", claim: "My lock screen is a photo of a beach at sunset" },
+  { category: "keys", colors: ["silver"], location: "Bus loop", daysAgo: 20, hours: 20, outcome: "returned", claim: "House key and a small flashlight on the ring" },
+  { category: "calculator_supplies", colors: ["black"], location: "Classroom wing", daysAgo: 16, hours: 47, outcome: "returned", claim: "Calculator has my initials scratched on the back" },
+  { category: "bag", colors: ["red"], location: "Main hall", daysAgo: 12, hours: 8, outcome: "returned", claim: "Red backpack, the zipper pull is a paperclip" },
+  { category: "earbuds_headphones", colors: ["white"], location: "Gym", daysAgo: 9, hours: 30, outcome: "returned", claim: "Left earbud has a tiny chip on the stem" },
+  { category: "glasses_medical", colors: ["brown"], location: "Library", daysAgo: 6, hours: 4, outcome: "returned", claim: "Tortoiseshell glasses in a green case" },
+  { category: "sports_gear", colors: ["white"], location: "Field", daysAgo: 3, hours: 22, outcome: "returned", claim: "Soccer cleats, size 8, orange laces" },
+  { category: "clothing", colors: ["green"], location: "Field", daysAgo: 30, hours: 22 * 24, outcome: "donated" },
+  { category: "books_stationery", colors: ["yellow"], location: "Main hall", daysAgo: 29, hours: 21 * 24, outcome: "donated" },
+];
+
 const DAY_MS = 24 * 60 * 60 * 1000;
+const HOUR_MS = 60 * 60 * 1000;
 
 export async function seedDemo(db: PGlite, uploadsRoot: string, now = new Date()): Promise<{ items: number }> {
   const schoolDir = path.join(uploadsRoot, DEMO_SCHOOL_ID);
@@ -141,6 +173,25 @@ export async function seedDemo(db: PGlite, uploadsRoot: string, now = new Date()
         ],
       );
       if (!firstLimited && visibility === "limited") firstLimited = row.id;
+    }
+
+    // Last month's history, for the impact dashboard.
+    for (const [i, h] of DEMO_HISTORY.entries()) {
+      const loggedAt = new Date(now.getTime() - h.daysAgo * DAY_MS - (i % 4) * HOUR_MS);
+      const resolvedAt = new Date(Math.min(loggedAt.getTime() + h.hours * HOUR_MS, now.getTime() - HOUR_MS));
+      const [row] = await q<{ id: string }>(
+        `insert into public.items (school_id, category, colors, found_location_id, found_at, visibility, status, resolved_at, created_by, created_at, updated_at)
+         values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $5, $8) returning id`,
+        [DEMO_SCHOOL_ID, h.category, h.colors, locationIds.get(h.location), loggedAt.toISOString(), PRESETS.standard[h.category], h.outcome, resolvedAt.toISOString(), user.id],
+      );
+      if (h.claim) {
+        const claimedAt = new Date(loggedAt.getTime() + Math.min(2 * HOUR_MS, (resolvedAt.getTime() - loggedAt.getTime()) / 2));
+        await q(
+          `insert into public.claims (school_id, item_id, claimant_detail, code_hash, status, reviewed_by, reviewed_at, picked_up_at, created_at)
+           values ($1, $2, $3, $4, 'picked_up', $5, $6, $7, $6)`,
+          [DEMO_SCHOOL_ID, row.id, h.claim, await hashCode(generateClaimCode()), user.id, claimedAt.toISOString(), resolvedAt.toISOString()],
+        );
+      }
     }
 
     // One claim waiting in the queue, so the staff view isn't empty.
