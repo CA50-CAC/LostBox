@@ -15,7 +15,8 @@
     "test:supabase": "pnpm --filter @lostbox/web test:supabase",
     "db:status": "supabase migration list --linked",
     "db:push": "supabase db push --linked",
-    "test:e2e": "pnpm --filter @lostbox/web test:e2e"
+    "test:e2e": "pnpm --filter @lostbox/web test:e2e",
+    "eval": "pnpm --filter @lostbox/eval eval"
   },
   "devDependencies": {
     "supabase": "^2.118.0"

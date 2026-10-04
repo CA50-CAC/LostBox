@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "items": [
+    { "id": "syn-01", "photos": ["photos/syn-01.jpg"], "category": "bottle_lunchbox", "colors": ["black"], "note": "Steel bottle, dent near the lid", "foundLocation": "Gym", "foundAt": "2026-09-01T15:00:00Z", "queries": ["black steel water bottle with a dent", "dented black bottle"] },
+    { "id": "syn-02", "photos": ["photos/syn-02.jpg"], "category": "bottle_lunchbox", "colors": ["black"], "note": "Plastic bottle with a soccer sticker", "foundLocation": "Field", "foundAt": "2026-09-02T15:00:00Z", "queries": ["bottle with a soccer sticker"] },
+    { "id": "syn-03", "photos": ["photos/syn-03.jpg"], "category": "clothing", "colors": ["gray"], "note": "Hoodie, size M, paint on the left cuff", "foundLocation": "Main hall", "foundAt": "2026-09-03T15:00:00Z", "queries": ["gray hoodie with paint on the sleeve", "grey sweatshirt"] },
+    { "id": "syn-04", "photos": ["photos/syn-04.jpg"], "category": "clothing", "colors": ["gray"], "note": "Zip-up hoodie, size L", "foundLocation": "Gym", "foundAt": "2026-09-04T15:00:00Z", "queries": ["gray zip up hoodie"] },
+    { "id": "syn-05", "photos": ["photos/syn-05.jpg"], "category": "earbuds_headphones", "colors": ["white"], "note": "Earbuds case, small crack on the hinge", "foundLocation": "Library", "foundAt": "2026-09-05T15:00:00Z", "queries": ["white earbuds case cracked"] },
+    { "id": "syn-06", "photos": ["photos/syn-06.jpg"], "category": "calculator_supplies", "colors": ["black"], "note": "Graphing calculator", "foundLocation": "Classroom wing", "foundAt": "2026-09-06T15:00:00Z", "queries": ["graphing calculator", "my TI calculator"] },
+    { "id": "syn-07", "photos": ["photos/syn-07.jpg"], "category": "bag", "colors": ["blue"], "note": "Backpack with a star keychain", "foundLocation": "Bus loop", "foundAt": "2026-09-07T15:00:00Z", "queries": ["blue backpack star keychain"] },
+    { "id": "syn-08", "photos": ["photos/syn-08.jpg"], "category": "keys", "colors": ["silver", "red"], "note": "Three keys on a red lanyard", "foundLocation": "Field", "foundAt": "2026-09-08T15:00:00Z", "queries": ["keys on a red lanyard"] }
+  ]
+}
