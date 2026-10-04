@@ -63,7 +63,7 @@ await check("staff sign-in page loads and is noindex", async () => {
 });
 
 await check("staff pages send anonymous visitors to sign in", async () => {
-  for (const path of ["/admin", "/admin/claims", "/admin/settings"]) {
+  for (const path of ["/admin", "/admin/claims", "/admin/donate", "/admin/settings"]) {
     const { res } = await get(path);
     expect(isRedirectTo(res, "/login"), `${path}: expected a redirect to /login, got ${res.status} ${res.headers.get("location") ?? ""}`);
   }
@@ -78,6 +78,12 @@ await check("school pages need a join code and are noindex", async () => {
   const { res } = await get("/s/smoke-test-no-such-school");
   expect(isRedirectTo(res, "/"), `expected a redirect to /, got ${res.status}`);
   expect((res.headers.get("x-robots-tag") ?? "").includes("noindex"), "missing X-Robots-Tag: noindex");
+});
+
+await check("the retention job refuses calls without the cron secret", async () => {
+  const { res } = await get("/api/cron/retention");
+  // 401 = secret set but not sent; 503 = CRON_SECRET not configured yet (fix that in Vercel).
+  expect(res.status === 401, res.status === 503 ? "CRON_SECRET is not set on this deployment" : `status ${res.status}`);
 });
 
 await check("unsigned photo URLs are refused", async () => {

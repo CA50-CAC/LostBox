@@ -123,11 +123,12 @@ Vercel (preview environment) is missing settings:
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | pilot project | **test** project | only with `supabase` | No | `sb_publishable_…`. Safe to expose (RLS protects data); no browser client uses it today. |
 | `SUPABASE_SECRET_KEY` | pilot project | **test** project | only with `supabase` | **Yes** | `sb_secret_…`. Mark **Sensitive** in Vercel. Never prefix with `NEXT_PUBLIC_`. |
 | `SESSION_SECRET` | random, 32+ chars | a *different* random value | optional (dev default) | **Yes** | Signs student and staff cookies. `node -e "console.log(crypto.randomBytes(32).toString('base64url'))"`. Changing it signs everyone out. |
+| `CRON_SECRET` | random, 16+ chars | leave unset | optional | **Yes** | Lets Vercel Cron run the daily photo retention job (section 6). Cron only runs on production. Unset = the job refuses to run. |
 | `APP_URL` | `https://your-domain` | leave unset | `http://localhost:3000` | No | No trailing slash. Must match the Supabase Site URL. Unset previews use their branch URL. |
 | `DEMO_MODE` | `false` or unset | `false` or unset | `true` (default with PGlite) | No | Never `true` on a real school's deployment. |
 | `PLATFORM_ADMIN_EMAILS` | your email | your email | optional | No | Comma-separated. These accounts can approve schools at `/platform/schools`. |
 
-Only `SUPABASE_SECRET_KEY` and `SESSION_SECRET` are secrets; mark both **Sensitive**
+Only `SUPABASE_SECRET_KEY`, `SESSION_SECRET`, and `CRON_SECRET` are secrets; mark them **Sensitive**
 in Vercel so they can't be read back from the dashboard.
 
 Not needed on Vercel: `LOSTBOX_DATA_DIR`, `SUPABASE_TEST_*`.
