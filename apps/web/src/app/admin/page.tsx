@@ -11,6 +11,8 @@ import { foundAgo } from "@/lib/i18n/dates";
 import { t } from "@/lib/i18n";
 import { photoStore } from "@/lib/server/photos";
 import { getStaffContext } from "@/lib/server/staff-context";
+import { listReadyToDonate } from "@/lib/services/donate";
+import { Icon } from "@/components/icons";
 
 const selectClass = "min-h-11 w-full rounded-xl border border-border bg-card px-3 shadow-xs md:w-auto";
 
@@ -24,7 +26,7 @@ export default async function ItemsPage({ searchParams }: PageProps<"/admin">) {
   const statuses: ItemStatus[] | undefined =
     status === "open" ? ["available", "claimed"] : (ITEM_STATUSES as readonly string[]).includes(status) ? [status as ItemStatus] : undefined;
 
-  const [items, locations, claims] = await Promise.all([
+  const [items, locations, claims, donate] = await Promise.all([
     repo.listItems(school.id, {
       statuses,
       categories: category ? [category] : undefined,
@@ -32,6 +34,7 @@ export default async function ItemsPage({ searchParams }: PageProps<"/admin">) {
     }),
     repo.listLocations(school.id),
     repo.listClaims(school.id, ["pending"]),
+    listReadyToDonate(repo, school.id, school.donateAfterDays),
   ]);
   const pendingByItem = new Map<string, number>();
   for (const c of claims) pendingByItem.set(c.itemId, (pendingByItem.get(c.itemId) ?? 0) + 1);
@@ -49,6 +52,16 @@ export default async function ItemsPage({ searchParams }: PageProps<"/admin">) {
       {params.reset ? <Alert tone="success">{t("demo.resetDone")}</Alert> : null}
       {params.removed ? <Alert tone="success">{t("status.removed")}.</Alert> : null}
       {params.error === "owner" ? <Alert tone="warning">{t("admin.error.owner")}</Alert> : null}
+      {donate.items.length ? (
+        <Link href="/admin/donate" className="card flex min-h-14 items-center gap-3 px-4 py-3 font-semibold hover:bg-surface">
+          <span aria-hidden className="grid size-10 shrink-0 place-items-center rounded-xl bg-warning-soft text-warning">
+            <Icon name="clock" className="size-5" />
+          </span>
+          <span className="flex-1">{t("donate.banner", { count: donate.items.length })}</span>
+          <span className="text-sm text-accent">{t("donate.bannerAction")}</span>
+          <Icon name="chevron" className="size-5 text-muted" />
+        </Link>
+      ) : null}
 
       <form method="get" className="card grid grid-cols-2 items-end gap-3 p-3 sm:p-4 md:flex md:flex-wrap" aria-label="Filters">
         <label className="flex min-w-0 flex-col gap-1 text-sm font-medium">

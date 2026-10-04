@@ -123,11 +123,12 @@ Vercel (preview environment) is missing settings:
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | pilot project | **test** project | only with `supabase` | No | `sb_publishable_…`. Safe to expose (RLS protects data); no browser client uses it today. |
 | `SUPABASE_SECRET_KEY` | pilot project | **test** project | only with `supabase` | **Yes** | `sb_secret_…`. Mark **Sensitive** in Vercel. Never prefix with `NEXT_PUBLIC_`. |
 | `SESSION_SECRET` | random, 32+ chars | a *different* random value | optional (dev default) | **Yes** | Signs student and staff cookies. `node -e "console.log(crypto.randomBytes(32).toString('base64url'))"`. Changing it signs everyone out. |
+| `CRON_SECRET` | random, 16+ chars | leave unset | optional | **Yes** | Lets Vercel Cron run the daily photo retention job (section 6). Cron only runs on production. Unset = the job refuses to run. |
 | `APP_URL` | `https://your-domain` | leave unset | `http://localhost:3000` | No | No trailing slash. Must match the Supabase Site URL. Unset previews use their branch URL. |
 | `DEMO_MODE` | `false` or unset | `false` or unset | `true` (default with PGlite) | No | Never `true` on a real school's deployment. |
 | `PLATFORM_ADMIN_EMAILS` | your email | your email | optional | No | Comma-separated. These accounts can approve schools at `/platform/schools`. |
 
-Only `SUPABASE_SECRET_KEY` and `SESSION_SECRET` are secrets; mark both **Sensitive**
+Only `SUPABASE_SECRET_KEY`, `SESSION_SECRET`, and `CRON_SECRET` are secrets; mark them **Sensitive**
 in Vercel so they can't be read back from the dashboard.
 
 Not needed on Vercel: `LOSTBOX_DATA_DIR`, `SUPABASE_TEST_*`.
@@ -178,10 +179,34 @@ secret-looking value appears in any page. Then by hand:
    gone from the student's screen after a refresh.
 6. Dark mode and a phone: the gallery, the item screen, and the claims queue.
 
+## 6. Photo retention job (daily)
+
+Photos of resolved items (returned, donated, removed) are deleted after the
+school's retention period (default 7 days). The item row stays, without a photo.
+The same job forgets the optional contact email on claims that were rejected or
+picked up longer ago than that period (the claim itself stays, for the record).
+The job lives at `/api/cron/retention`, and `apps/web/vercel.json` schedules it
+for **10:00 UTC every day** (about 2 to 3 a.m. in California).
+
+- **`CRON_SECRET` (secret, Production only):** a random string of at least 16
+  characters (`node -e "console.log(crypto.randomBytes(32).toString('base64url'))"`).
+  Mark it **Sensitive**. Vercel sends it as `Authorization: Bearer <CRON_SECRET>`
+  when it calls the job; any other call gets `401`. If it's missing, the job
+  answers `503` and does nothing, so photos are kept, not leaked.
+- **Hobby plan limits** ([Vercel docs](https://vercel.com/docs/cron-jobs/usage-and-pricing)):
+  cron jobs can run at most once a day, and Vercel may run them any time within
+  the scheduled hour. A daily job with a 7-day window doesn't need more.
+- **Check it ran:** Vercel → Project → Settings → Cron Jobs shows each run and
+  has a **Run** button. The response is just counts, e.g. `{"deleted":2,"failed":0,"contactsCleared":1}`.
+  Each deletion is also in the school's audit log as `photo.deleted`.
+- **Run it by hand** (e.g. locally): `curl -H "Authorization: Bearer $CRON_SECRET" <APP_URL>/api/cron/retention`.
+- Cron jobs only run on production deployments, not previews.
+
 ## What CI checks before you deploy
 
 - `check`: typecheck, lint, unit and database tests (PGlite).
-- `secrets`: a production build with the Supabase adapter and a fake secret key,
-  then a scan that fails if the key appears in any file served to browsers.
+- `secrets`: a production build with the Supabase adapter and fake secrets
+  (Supabase key, session secret, cron secret), then a scan that fails if any of
+  them appears in a file served to browsers.
 - `e2e`: Playwright against a production build with the demo school (the full
   loop, privacy rules, wizard resume, and axe accessibility checks).
