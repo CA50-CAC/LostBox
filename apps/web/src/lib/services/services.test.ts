@@ -8,6 +8,7 @@ import { openPglite } from "@/lib/db/pglite";
 import { RepoError, type Repositories, type StaffActor } from "@/lib/repo/interface";
 import { createPgliteRepositories } from "@/lib/repo/pglite";
 import { decideClaim } from "./claims";
+import { reviewSchool } from "./schools";
 import { searchItems } from "./search";
 
 let db: PGlite;
@@ -88,5 +89,36 @@ describe("searchItems", () => {
     expect(ids).not.toContain(hidden.id);
     expect(ids.every((id) => items.get(id)?.category === "bag")).toBe(true);
     expect((await searchItems(repos.forStudent(schoolId), "purple unicorn")).ids).toEqual([]);
+  });
+});
+
+describe("reviewSchool", () => {
+  const admin = { email: "platform@lostbox.test", isPlatformAdmin: true };
+
+  it("approving turns the join code on, rejecting turns it off again", async () => {
+    const school = (await repos.forStaff(staff).getSchool(schoolId))!;
+    expect(school.status).toBe("pending_review");
+    expect(await repos.system().findJoinableSchool(school.joinCode)).toBeNull();
+
+    expect(await reviewSchool(repos.platform(), admin, schoolId, "approve")).toBe("approved");
+    expect((await repos.system().findJoinableSchool(school.joinCode))?.id).toBe(schoolId);
+    const listed = (await repos.platform().listSchools("approved")).find((s) => s.id === schoolId);
+    expect(listed?.ownerEmail).toBe("o@school.edu");
+
+    await reviewSchool(repos.platform(), admin, schoolId, "reject");
+    expect(await repos.system().findJoinableSchool(school.joinCode)).toBeNull();
+    await reviewSchool(repos.platform(), admin, schoolId, "reopen");
+    expect((await repos.forStaff(staff).getSchool(schoolId))?.status).toBe("pending_review");
+  });
+
+  it("refuses anyone who isn't a platform admin", async () => {
+    await expect(
+      reviewSchool(repos.platform(), { email: "o@school.edu", isPlatformAdmin: false }, schoolId, "approve"),
+    ).rejects.toMatchObject({ code: "forbidden" });
+    expect((await repos.forStaff(staff).getSchool(schoolId))?.status).toBe("pending_review");
+  });
+
+  it("refuses an unknown decision", async () => {
+    await expect(reviewSchool(repos.platform(), admin, schoolId, "delete" as never)).rejects.toBeInstanceOf(RepoError);
   });
 });
