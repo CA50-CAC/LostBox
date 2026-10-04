@@ -36,6 +36,7 @@ pnpm typecheck
 pnpm lint
 pnpm test            # unit, database, and repository contract tests (PGlite)
 pnpm test:e2e        # Playwright: the full loop, privacy, wizard, accessibility
+pnpm smoke <url>     # read-only checks against a running deployment
 ```
 
 `pnpm test:e2e` builds the app and uses its own data folder (`.data-e2e/`). It
@@ -66,6 +67,7 @@ matches `supabase/migrations/`.
 pnpm exec supabase login                                   # once per machine, opens a browser
 pnpm exec supabase link --project-ref <your-project-ref>   # once per clone; asks for the DB password
 pnpm db:status                                             # which migrations the hosted DB has
+pnpm db:push:dry                                           # list what db:push would apply, change nothing
 pnpm db:push                                               # apply new migrations (ask the team first)
 ```
 
@@ -111,6 +113,7 @@ again resets the demo school to the same state.
 | `/setup` | school admins | 7-step setup wizard (resumes where you left off) |
 | `/admin` | staff | items list; `/admin/items/new` intake; `/admin/claims` queue; `/admin/settings` |
 | `/invite/[token]` | staff | accept an invite |
+| `/platform/schools` | platform admins (`PLATFORM_ADMIN_EMAILS`) | approve or reject new schools |
 
 ## Repository layout
 
