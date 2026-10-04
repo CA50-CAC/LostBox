@@ -151,3 +151,13 @@ Found while reviewing `0001_init.sql` before its first push. Fixed in `0001` its
 ### 2026-10-01: Out of scope, as agreed
 
 AI matching, auto-fill, auto-blur, notifications, analytics, lost-item reports, the platform approval page, the poster page, the donate list, the retention job (the data-layer methods for it exist and are tested), logo upload, location "nearby" links UI, and QR codes on the launch screen.
+
+### 2026-10-04: Search evaluation harness (`eval/`)
+
+- **What's built:** the manifest format (validated with zod), an item-level dev/test split, the metrics (Recall@1/3/5, MRR, median rank, found), two baselines, a results table, and saving of aggregate results stamped with the date and commit. **Not built:** the ranking algorithm. `apps/web/src/lib/services/match.ts` is a clearly marked stub with exactly the `searchItems` signature (a type test enforces it); the harness reports it as "not implemented" until the student writes it.
+- **Same code as the app:** B1 imports the app's real `searchItems`, and every system gets a student data layer (`memoryStudentRepo`) shaped like `forStudent()`. So the numbers measured are the numbers shipped (SPEC 7.4).
+- **Split by hashing each item id with a fixed seed**, not by shuffling: adding items never moves old ones between dev and test, and all of an item's queries stay on one side.
+- **Misses count as last.** Median rank is "not found" if more than half the queries miss, and a separate "found" column shows how often a filter hides the right item entirely. That's B1's real weakness, so it should be visible, not averaged away.
+- **Privacy:** photos, the manifest (owners' words), and per-query details are git-ignored (`eval/.gitignore`). Saved results hold counts and metrics only. The test fixture is synthetic.
+- **A workspace package** (`@lostbox/eval`, added to `pnpm-workspace.yaml`) with its own tests and typecheck, so `pnpm test` and CI cover it. It reaches the app's code through the `@/` path alias, not a copy.
+
