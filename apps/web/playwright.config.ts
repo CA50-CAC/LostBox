@@ -34,6 +34,7 @@ export default defineConfig({
       DEMO_MODE: "true",
       SESSION_SECRET: "e2e-only-session-secret-0123456789abcdef",
       APP_URL: `http://localhost:${PORT}`,
+      PLATFORM_ADMIN_EMAILS: "platform@lostbox.test",
       NEXT_TELEMETRY_DISABLED: "1",
     },
   },
