@@ -12,6 +12,7 @@
     "test:watch": "vitest",
     "test:supabase": "vitest run --config vitest.supabase.config.mts",
     "seed:demo": "tsx scripts/seed-demo.ts",
+    "smoke": "node scripts/smoke.mjs",
     "test:e2e": "playwright test"
   },
   "dependencies": {
