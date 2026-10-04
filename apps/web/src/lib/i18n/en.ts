@@ -437,6 +437,24 @@ export const en = {
   "settings.staff": "Staff",
   "settings.joinCode": "Student access",
 
+  "qr.alt": "QR code that opens LostBox for {school}",
+  "qr.title": "QR code",
+  "qr.help": "Scanning it opens LostBox with your join code filled in. It changes automatically if you get a new code.",
+  "qr.download": "Download QR",
+  "poster.open": "Print poster",
+  "poster.title": "Poster",
+  "poster.headline": "Lost something?",
+  "poster.sub": "Scan to browse the lost and found.",
+  "poster.orVisit": "Or go to {host} and enter the code",
+  "poster.code": "Join code",
+  "poster.pickup": "Pick up at",
+  "poster.hours": "Hours",
+  "poster.unset": "Ask at the front office",
+  "poster.footer": "Found items are listed on LostBox. No account needed. Bring your claim code when you pick up.",
+  "poster.print": "Print",
+  "poster.back": "Back to settings",
+  "poster.tip": "Letter paper, portrait. Black and white is fine. Reprint it if you get a new join code.",
+  "poster.pendingNote": "Your school is waiting for approval: this code won't work for students until then.",
 } as const;
 
 export type MessageKey = keyof typeof en;

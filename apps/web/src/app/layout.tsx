@@ -40,7 +40,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {t("common.skipToContent")}
         </a>
         {demo ? (
-          <p className="flex items-center justify-center gap-2 border-b border-warning/20 bg-warning-soft px-4 py-1.5 text-center text-sm font-medium text-warning">
+          <p className="flex items-center justify-center gap-2 border-b border-warning/20 bg-warning-soft px-4 py-1.5 print:hidden text-center text-sm font-medium text-warning">
             <span aria-hidden className="size-1.5 rounded-full bg-warning" />
             {t("common.demoBanner")}
           </p>

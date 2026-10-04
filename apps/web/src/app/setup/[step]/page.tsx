@@ -94,7 +94,7 @@ export default async function SetupStep({ params }: PageProps<"/setup/[step]">) 
             {fresh.status === "approved" ? t("launch.approved") : t("launch.pendingApproval")}
           </Alert>
           <section className="card p-5 sm:p-6">
-            <JoinCodePanel code={fresh.joinCode} appUrl={appEnv().appUrl} isOwner />
+            <JoinCodePanel code={fresh.joinCode} appUrl={appEnv().appUrl} slug={fresh.slug} schoolName={fresh.name} isOwner />
           </section>
           <section aria-labelledby="summary" className="flex flex-col gap-2">
             <h2 id="summary" className="font-semibold">
