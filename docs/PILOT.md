@@ -31,8 +31,8 @@ It replaces "come dig through the box" with "check your phone first".
 - No location data. GPS is stripped from every photo.
 - No ads, tracking, or analytics. Nothing is sold or shared.
 
-Photos of returned, donated, or removed items are deleted automatically after
-the number of days the school chooses (7 by default). The full plain-English
+Photos of returned, donated, or removed items, and contact emails on closed
+claims, are deleted automatically after the number of days the school chooses (7 by default). The full plain-English
 policy is at `/privacy` in the app.
 
 ## Daily staff workflow

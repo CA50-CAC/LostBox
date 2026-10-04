@@ -488,6 +488,7 @@ export const en = {
   "privacyPage.staff.3": "The people who run LostBox can reach the database to keep it working. They don't look at items or claims except to fix a problem.",
   "privacyPage.retention.title": "How long things are kept",
   "privacyPage.retention.1": "Photos are deleted automatically a few days after an item is returned, donated, or removed. Each school picks how many days (7 unless they change it).",
+  "privacyPage.retention.contact": "If you gave an email with a claim, it's deleted the same number of days after the claim is closed.",
   "privacyPage.retention.2": "Items still waiting on the shelf keep their photo, so owners can find them.",
   "privacyPage.retention.3": "The item's basic record (kind, color, dates) is kept without a photo, so the school can count how many things got home.",
   "privacyPage.retention.4": "Staff can remove any item at any time, and every removal is logged.",

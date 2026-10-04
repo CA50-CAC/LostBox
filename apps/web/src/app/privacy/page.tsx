@@ -25,7 +25,7 @@ const SECTIONS: Array<{ id: string; icon: IconName; title: MessageKey; points: M
     id: "retention",
     icon: "clock",
     title: "privacyPage.retention.title",
-    points: ["privacyPage.retention.1", "privacyPage.retention.2", "privacyPage.retention.3", "privacyPage.retention.4"],
+    points: ["privacyPage.retention.1", "privacyPage.retention.contact", "privacyPage.retention.2", "privacyPage.retention.3", "privacyPage.retention.4"],
   },
 ];
 
