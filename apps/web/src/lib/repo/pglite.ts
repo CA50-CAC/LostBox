@@ -547,7 +547,30 @@ function pgliteSystemRepo(asSystem: <T>(fn: (q: Q) => Promise<T>) => Promise<T>)
 
     clearPhoto: (itemId) =>
       asSystem(async (q) => {
-        await q("update public.items set photo_path = null, photo_deleted_at = now() where id = $1", [itemId]);
+        const rows = await q(
+          "update public.items set photo_path = null, photo_deleted_at = now() where id = $1 and photo_path is not null returning school_id",
+          [itemId],
+        );
+        if (!rows[0]) return;
+        await q(
+          `insert into public.audit_log (school_id, actor_id, action, item_id, detail) values ($1, null, 'photo.deleted', $2, '{"reason":"retention"}')`,
+          [rows[0].school_id, itemId],
+        );
+      }),
+
+    clearClosedClaimContacts: (now) =>
+      asSystem(async (q) => {
+        const rows = await q(
+          `update public.claims c set contact_email = null
+             from public.schools s
+            where s.id = c.school_id
+              and c.contact_email is not null
+              and c.status in ('rejected', 'picked_up')
+              and coalesce(c.picked_up_at, c.reviewed_at) + make_interval(days => s.photo_retention_days) < $1
+            returning c.id`,
+          [now.toISOString()],
+        );
+        return rows.length;
       }),
   };
 }

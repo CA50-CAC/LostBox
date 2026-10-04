@@ -150,7 +150,7 @@ Found while reviewing `0001_init.sql` before its first push. Fixed in `0001` its
 
 ### 2026-10-01: Out of scope, as agreed
 
-AI matching, auto-fill, auto-blur, notifications, analytics, lost-item reports, the poster page, the donate list, the retention job (the data-layer methods for it exist and are tested), logo upload, location "nearby" links UI, and QR codes on the launch screen.
+AI matching, auto-fill, auto-blur, notifications, analytics, lost-item reports, the poster page, logo upload, location "nearby" links UI, and QR codes on the launch screen.
 
 ### 2026-10-04: Production readiness
 

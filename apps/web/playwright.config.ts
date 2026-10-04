@@ -35,6 +35,7 @@ export default defineConfig({
       SESSION_SECRET: "e2e-only-session-secret-0123456789abcdef",
       APP_URL: `http://localhost:${PORT}`,
       PLATFORM_ADMIN_EMAILS: "platform@lostbox.test",
+      CRON_SECRET: "e2e-only-cron-secret-0123456789",
       NEXT_TELEMETRY_DISABLED: "1",
     },
   },

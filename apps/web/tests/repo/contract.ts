@@ -580,6 +580,32 @@ export function repositoryContract(name: string, open: () => Promise<RepoHarness
         await sys.clearPhoto(it1.id);
         expect((await repo.getItem(schoolB.id, it1.id))?.photoPath).toBeNull();
         expect((await sys.listExpiredPhotos(later)).map((p) => p.itemId)).not.toContain(it1.id);
+        expect((await h.auditActions(schoolB.id)).filter((a) => a === "photo.deleted")).toHaveLength(1);
+        // Clearing again (a retried job) doesn't log twice.
+        await sys.clearPhoto(it1.id);
+        expect((await h.auditActions(schoolB.id)).filter((a) => a === "photo.deleted")).toHaveLength(1);
+      });
+
+      it("forgets contact emails on claims that closed before the retention period, and keeps the rest", async () => {
+        const repo = h.repos.forStaff(ownerB);
+        await repo.updatePolicies(schoolB.id, { photoRetentionDays: 0, donateAfterDays: 30, pickupLocation: "", pickupHours: "" });
+        const students = h.repos.forStudent(schoolB.id);
+        const claimFor = async (tag: string) => {
+          const it = await repo.createItem(schoolB.id, item(gymB));
+          await students.createClaim({ itemId: it.id, claimantDetail: "It has a red tag", contactEmail: `${tag}@student.test`, codeHash: `hash-${h.runId}-${tag}` });
+          return (await repo.listClaims(schoolB.id)).find((c) => c.itemId === it.id)!;
+        };
+        const rejected = await claimFor("rej");
+        const stillPending = await claimFor("pend");
+        await repo.setClaimStatus(schoolB.id, rejected.id, "rejected");
+
+        const sys = h.repos.system();
+        // Not yet: the claim closed just now.
+        expect(await sys.clearClosedClaimContacts(new Date(Date.now() - 60 * 60_000))).toBe(0);
+        expect(await sys.clearClosedClaimContacts(new Date(Date.now() + 60_000))).toBeGreaterThanOrEqual(1);
+        expect((await repo.getClaim(schoolB.id, rejected.id))?.contactEmail).toBeNull();
+        expect((await repo.getClaim(schoolB.id, rejected.id))?.claimantDetail).toBe("It has a red tag");
+        expect((await repo.getClaim(schoolB.id, stillPending.id))?.contactEmail).toBe("pend@student.test");
       });
     });
   });
