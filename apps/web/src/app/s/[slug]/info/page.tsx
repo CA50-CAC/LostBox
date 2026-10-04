@@ -66,13 +66,24 @@ export default async function InfoPage({ params }: PageProps<"/s/[slug]/info">) 
 
       <section aria-labelledby="switch" className="flex flex-col gap-3">
         <h2 id="switch" className="px-1 text-sm font-semibold tracking-wide text-muted uppercase">
-          {t("info.switchTitle")}
+          {t("info.more")}
         </h2>
-        <Link href="/" className="card flex min-h-14 items-center gap-3 px-4 font-semibold hover:bg-surface">
-          <Icon name="swap" className="size-5 text-accent" />
-          <span className="flex-1">{t("info.switch")}</span>
-          <Icon name="chevron" className="size-5 text-muted" />
-        </Link>
+        <ul className="card divide-y divide-border overflow-hidden">
+          <li>
+            <Link href="/" className="flex min-h-14 items-center gap-3 px-4 font-semibold hover:bg-surface">
+              <Icon name="swap" className="size-5 text-accent" />
+              <span className="flex-1">{t("info.switch")}</span>
+              <Icon name="chevron" className="size-5 text-muted" />
+            </Link>
+          </li>
+          <li>
+            <Link href="/privacy" className="flex min-h-14 items-center gap-3 px-4 font-semibold hover:bg-surface">
+              <Icon name="lock" className="size-5 text-accent" />
+              <span className="flex-1">{t("info.privacy")}</span>
+              <Icon name="chevron" className="size-5 text-muted" />
+            </Link>
+          </li>
+        </ul>
       </section>
     </div>
   );

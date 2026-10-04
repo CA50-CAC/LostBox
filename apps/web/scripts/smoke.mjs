@@ -55,6 +55,12 @@ await check("home page loads", async () => {
   noSecrets(body);
 });
 
+await check("privacy page loads", async () => {
+  const { res, body } = await get("/privacy");
+  expect(res.status === 200, `status ${res.status}`);
+  noSecrets(body);
+});
+
 await check("staff sign-in page loads and is noindex", async () => {
   const { res, body } = await get("/login");
   expect(res.status === 200, `status ${res.status}`);
