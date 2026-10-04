@@ -21,7 +21,7 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
   const demoSchool = env.demoMode && env.dataAdapter === "pglite" && school.id === DEMO_SCHOOL_ID;
 
   const tabs: Tab[] = [
-    { href: "/admin", label: t("nav.items"), icon: "grid", match: ["=/admin", "/admin/items/"], except: ["/admin/items/new"] },
+    { href: "/admin", label: t("nav.items"), icon: "grid", match: ["=/admin", "/admin/items/", "/admin/donate"], except: ["/admin/items/new"] },
     { href: "/admin/items/new", label: t("nav.add"), icon: "plus", match: ["/admin/items/new"], primary: true },
     { href: "/admin/claims", label: t("nav.claims"), icon: "inbox", match: ["/admin/claims"], badge: pending },
     { href: "/admin/settings", label: t("nav.settings"), icon: "gear", match: ["/admin/settings"] },
