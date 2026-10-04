@@ -150,7 +150,14 @@ Found while reviewing `0001_init.sql` before its first push. Fixed in `0001` its
 
 ### 2026-10-01: Out of scope, as agreed
 
-AI matching, auto-fill, auto-blur, notifications, analytics, lost-item reports, the platform approval page, the donate list, the retention job (the data-layer methods for it exist and are tested), logo upload, location "nearby" links UI.
+AI matching, auto-fill, auto-blur, notifications, analytics, lost-item reports, the donate list, the retention job (the data-layer methods for it exist and are tested), logo upload, and location "nearby" links UI.
+
+### 2026-10-04: Production readiness
+
+- **Platform approval page:** `/platform/schools` lists schools by status (waiting, approved, rejected) with Approve, Reject, and "move back to waiting". Only emails in `PLATFORM_ADMIN_EMAILS` can open it; everyone else gets a 404 rather than "forbidden", so the page doesn't advertise itself. The rule lives in `services/schools.ts` (`reviewSchool`) and is checked again there, not only by the page. It uses the existing `platform()` repository, so no schema change. This replaces the "approve with SQL" step in DEPLOY.md.
+- **SMTP provider: Resend**, with Brevo as the fallback for anyone without a domain. Resend's free tier (3,000 a month, 100 a day) is about 20 times one school's staff sign-ins, it documents Supabase setup, and its SMTP password is a revocable, send-only API key. The Supabase auth email rate limit is set to 20 an hour so a runaway loop stays under the provider's daily cap. Alternatives: SendGrid (no lasting free tier now), Amazon SES (needs a paid AWS account and sandbox exit), Supabase's built-in email (2 an hour, team members only).
+- **`pnpm smoke <url>`:** read-only HTTP checks after each deploy (public pages, anonymous visitors bounced from staff pages, `noindex`, no secret-looking strings in HTML). It changes nothing, so it's safe against production. Sign-in, email, and the claim loop stay a short manual checklist, because they need a real inbox.
+- **`pnpm db:push:dry`:** `supabase db push --dry-run`, so the exact migrations are listed before anything is applied.
 
 ### 2026-10-04: QR codes and the print poster
 
