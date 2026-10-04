@@ -8,6 +8,10 @@ import { expect, test, type Page } from "@playwright/test";
 import { DEMO_SLUG, DEMO_STAFF, joinDemo, signIn } from "./helpers";
 
 async function expectNoViolations(page: Page, name: string) {
+  // After a client-side navigation React swaps the <title> in; checking in that
+  // instant reports a page with no title. Wait until the new page is settled.
+  await page.waitForLoadState("networkidle");
+  await expect(page).toHaveTitle(/\S/);
   const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"]).analyze();
   const summary = results.violations.map((v) => `${v.id} (${v.impact}): ${v.nodes.map((n) => n.target.join(" ")).join(", ")}`);
   expect(summary, `${name} has accessibility violations`).toEqual([]);
