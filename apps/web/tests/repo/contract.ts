@@ -580,6 +580,10 @@ export function repositoryContract(name: string, open: () => Promise<RepoHarness
         await sys.clearPhoto(it1.id);
         expect((await repo.getItem(schoolB.id, it1.id))?.photoPath).toBeNull();
         expect((await sys.listExpiredPhotos(later)).map((p) => p.itemId)).not.toContain(it1.id);
+        expect((await h.auditActions(schoolB.id)).filter((a) => a === "photo.deleted")).toHaveLength(1);
+        // Clearing again (a retried job) doesn't log twice.
+        await sys.clearPhoto(it1.id);
+        expect((await h.auditActions(schoolB.id)).filter((a) => a === "photo.deleted")).toHaveLength(1);
       });
     });
   });

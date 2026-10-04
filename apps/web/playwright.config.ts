@@ -34,6 +34,7 @@ export default defineConfig({
       DEMO_MODE: "true",
       SESSION_SECRET: "e2e-only-session-secret-0123456789abcdef",
       APP_URL: `http://localhost:${PORT}`,
+      CRON_SECRET: "e2e-only-cron-secret-0123456789",
       NEXT_TELEMETRY_DISABLED: "1",
     },
   },

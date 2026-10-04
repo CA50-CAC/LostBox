@@ -547,7 +547,15 @@ function pgliteSystemRepo(asSystem: <T>(fn: (q: Q) => Promise<T>) => Promise<T>)
 
     clearPhoto: (itemId) =>
       asSystem(async (q) => {
-        await q("update public.items set photo_path = null, photo_deleted_at = now() where id = $1", [itemId]);
+        const rows = await q(
+          "update public.items set photo_path = null, photo_deleted_at = now() where id = $1 and photo_path is not null returning school_id",
+          [itemId],
+        );
+        if (!rows[0]) return;
+        await q(
+          `insert into public.audit_log (school_id, actor_id, action, item_id, detail) values ($1, null, 'photo.deleted', $2, '{"reason":"retention"}')`,
+          [rows[0].school_id, itemId],
+        );
       }),
   };
 }

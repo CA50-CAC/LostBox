@@ -523,7 +523,20 @@ function supabaseSystemRepo(db: SupabaseClient): SystemRepo {
     },
 
     async clearPhoto(itemId) {
-      must(await db.from("items").update({ photo_path: null, photo_deleted_at: new Date().toISOString() }).eq("id", itemId));
+      const cleared = rows(
+        await db
+          .from("items")
+          .update({ photo_path: null, photo_deleted_at: new Date().toISOString() })
+          .eq("id", itemId)
+          .not("photo_path", "is", null)
+          .select("school_id"),
+      );
+      if (!cleared[0]) return;
+      must(
+        await db
+          .from("audit_log")
+          .insert({ school_id: cleared[0].school_id, actor_id: null, action: "photo.deleted", item_id: itemId, detail: { reason: "retention" } }),
+      );
     },
   };
 }
