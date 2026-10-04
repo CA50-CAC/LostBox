@@ -5,7 +5,7 @@ Congressional App Challenge 2026 entry (CA-50).
 
 > **Status:** MVP. Staff sign in with a magic link, set up a school, and post
 > found items with photos; students join with a code, browse, and claim; staff
-> approve and mark items returned. Deploying: see [`docs/DEPLOY.md`](docs/DEPLOY.md).
+> approve and mark items returned. Deploying: see [`docs/DEPLOY.md`](docs/DEPLOY.md). Running a pilot: [`docs/PILOT.md`](docs/PILOT.md).
 
 ## Quick start (demo, no accounts or services needed)
 
@@ -107,6 +107,7 @@ again resets the demo school to the same state.
 | Route | Who | What |
 |---|---|---|
 | `/` | students | enter a join code |
+| `/privacy` | everyone | what LostBox keeps and doesn't, in plain English |
 | `/s/[slug]` | students | gallery with search and filters; item pages; claim form |
 | `/s/[slug]/status` | students | check a claim with its code |
 | `/login`, `/auth/confirm` | staff | magic-link sign-in |
@@ -134,7 +135,7 @@ supabase/
 apps/web/tests/db   Database tests (isolation, schema guard); run on PGlite or Supabase
 apps/web/tests/repo Repository contract, run against both adapters
 apps/web/tests/e2e  Playwright: full loop, privacy, wizard, accessibility
-docs/               DECISIONS.md, AI_USAGE.md, DEPLOY.md
+docs/               DECISIONS.md, AI_USAGE.md, DEPLOY.md, PILOT.md
 ```
 
 ## How the privacy rules work (for explaining the project)
