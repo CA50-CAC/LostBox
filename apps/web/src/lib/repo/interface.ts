@@ -256,7 +256,13 @@ export interface SystemRepo {
   hitRateLimit(key: string, limit: number, windowSeconds: number): Promise<boolean>;
   /** Photos of items resolved more than N days ago (N per school). */
   listExpiredPhotos(now: Date): Promise<Array<{ itemId: string; photoPath: string }>>;
+  /** Forgets the item's photo and logs "photo.deleted". Does nothing if the photo is already gone. */
   clearPhoto(itemId: string): Promise<void>;
+  /**
+   * Forgets the optional contact email on claims that closed (rejected or
+   * picked up) more than the school's retention period ago. Returns how many.
+   */
+  clearClosedClaimContacts(now: Date): Promise<number>;
 }
 
 export interface Repositories {

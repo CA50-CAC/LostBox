@@ -1,3 +1,4 @@
+import { PrivacyLink } from "@/components/privacy-link";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Logo } from "@/components/logo";
@@ -92,6 +93,7 @@ export function WizardShell({
         {lead ? <p className="text-lg text-muted">{lead}</p> : null}
       </div>
       {children}
-    </main>
+      <PrivacyLink className="mt-auto pt-2" />
+      </main>
   );
 }

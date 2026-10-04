@@ -26,6 +26,7 @@ export type PhotoExt = "jpg" | "svg";
 export interface PhotoStore {
   save(schoolId: string, bytes: Uint8Array, ext: PhotoExt): Promise<string>;
   url(photoPath: string): Promise<string | null>;
+  /** Deletes the file. Throws if storage refuses; a file that's already gone is fine. */
   remove(photoPath: string): Promise<void>;
 }
 
@@ -70,8 +71,8 @@ export function contentTypeFor(photoPath: string): string {
   return CONTENT_TYPES[photoPath.split(".").pop() as PhotoExt] ?? "application/octet-stream";
 }
 
-function localStore(secret: string): PhotoStore {
-  const root = localUploadsDir();
+/** Exported for tests, which point it at a temporary folder. */
+export function localStore(secret: string, root: string = localUploadsDir()): PhotoStore {
   return {
     async save(schoolId, bytes, ext) {
       const p = newPhotoPath(schoolId, ext);
@@ -117,7 +118,10 @@ function supabaseStore(): PhotoStore {
       return error ? null : data.signedUrl;
     },
     async remove(photoPath) {
-      if (isSafePhotoPath(photoPath)) await bucket().remove([photoPath]);
+      if (!isSafePhotoPath(photoPath)) return;
+      // Removing a file that's already gone is not an error in Supabase Storage.
+      const { error } = await bucket().remove([photoPath]);
+      if (error) throw new Error(`Photo delete failed: ${error.message}`);
     },
   };
 }

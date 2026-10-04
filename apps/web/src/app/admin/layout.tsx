@@ -1,3 +1,4 @@
+import { PrivacyLink } from "@/components/privacy-link";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Logo } from "@/components/logo";
@@ -21,7 +22,7 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
   const demoSchool = env.demoMode && env.dataAdapter === "pglite" && school.id === DEMO_SCHOOL_ID;
 
   const tabs: Tab[] = [
-    { href: "/admin", label: t("nav.items"), icon: "grid", match: ["=/admin", "/admin/items/"], except: ["/admin/items/new"] },
+    { href: "/admin", label: t("nav.items"), icon: "grid", match: ["=/admin", "/admin/items/", "/admin/donate"], except: ["/admin/items/new"] },
     { href: "/admin/claims", label: t("nav.claims"), icon: "inbox", match: ["/admin/claims"], badge: pending },
     { href: "/admin/items/new", label: t("nav.add"), icon: "plus", match: ["/admin/items/new"], primary: true },
     { href: "/admin/stats", label: t("nav.stats"), icon: "chart", match: ["/admin/stats"] },
@@ -71,6 +72,7 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
           </Alert>
         ) : null}
         {children}
+        <PrivacyLink className="mt-auto pt-2" />
       </main>
       <TabBar tabs={tabs} label={t("nav.staffNav")} />
     </div>

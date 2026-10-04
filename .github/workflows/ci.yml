@@ -29,6 +29,8 @@ jobs:
       NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
       NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_ci_fake
       SUPABASE_SECRET_KEY: sb_secret_ci_fake_value_do_not_use
+      SESSION_SECRET: ci-fake-session-secret-do-not-use-0123456789
+      CRON_SECRET: ci-fake-cron-secret-do-not-use-0123456789
     steps:
       - uses: actions/checkout@v7
       - uses: pnpm/action-setup@v6

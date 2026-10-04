@@ -37,6 +37,13 @@ function parseItem(form: FormData) {
   });
 }
 
+/** Cleanup that shouldn't turn a saved edit into an error page. A leftover file is unreachable: nothing points at it. */
+async function removeQuietly(photoPath: string) {
+  await photoStore()
+    .remove(photoPath)
+    .catch((e: unknown) => console.error("Couldn't delete an unused photo", e instanceof Error ? e.message : e));
+}
+
 /** Processes and stores an uploaded photo, if there is one. */
 async function storePhoto(form: FormData, schoolId: string, userId: string): Promise<{ path: string | null } | { error: FormState }> {
   const file = form.get("photo");
@@ -60,7 +67,7 @@ export async function createItem(_prev: FormState, form: FormData): Promise<Form
     const input: NewItemInput = { ...parsed.data, photoPath: photo.path };
     id = (await repo.createItem(school.id, input)).id;
   } catch (e) {
-    if (photo.path) await photoStore().remove(photo.path);
+    if (photo.path) await removeQuietly(photo.path);
     if (e instanceof RepoError && e.code === "invalid") return { error: "common.error.generic" };
     throw e;
   }
@@ -85,11 +92,11 @@ export async function updateItem(_prev: FormState, form: FormData): Promise<Form
   try {
     await repo.updateItem(school.id, itemId, { ...parsed.data, photoPath });
   } catch (e) {
-    if (photo.path) await photoStore().remove(photo.path);
+    if (photo.path) await removeQuietly(photo.path);
     throw e;
   }
   // The old file is only deleted once the item no longer points at it.
-  if (existing.photoPath && existing.photoPath !== photoPath) await photoStore().remove(existing.photoPath);
+  if (existing.photoPath && existing.photoPath !== photoPath) await removeQuietly(existing.photoPath);
   revalidatePath("/admin");
   revalidatePath(`/admin/items/${itemId}`);
   return { ok: true };
