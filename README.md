@@ -37,6 +37,7 @@ pnpm lint
 pnpm test            # unit, database, and repository contract tests (PGlite)
 pnpm test:e2e        # Playwright: the full loop, privacy, wizard, accessibility
 pnpm smoke <url>     # read-only checks against a running deployment
+pnpm eval            # search evaluation (eval/README.md); needs your private manifest
 ```
 
 `pnpm test:e2e` builds the app and uses its own data folder (`.data-e2e/`). It

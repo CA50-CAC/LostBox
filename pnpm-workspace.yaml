@@ -1,6 +1,7 @@
 packages:
   - apps/*
   - packages/*
+  - eval
 
 # Packages allowed to run install scripts. Everything else is blocked by default.
 allowBuilds:

@@ -1,0 +1,8 @@
+# Raw evaluation data never goes into git: photos of real belongings and the
+# owners' own words. Keep them on your machine (or a private drive).
+data/
+*.local.json
+
+# Only aggregate results are committed (results/*.json). Anything that lists
+# per-query ranks or queries stays local.
+results/*-detail.json
