@@ -14,6 +14,6 @@ test("the retention route runs with the secret and reports counts only", async (
   const res = await request.get(URL, { headers: { Authorization: `Bearer ${CRON_SECRET}` } });
   expect(res.status()).toBe(200);
   const body = await res.json();
-  expect(Object.keys(body).sort()).toEqual(["deleted", "failed"]);
+  expect(Object.keys(body).sort()).toEqual(["contactsCleared", "deleted", "failed"]);
   expect(body.failed).toBe(0);
 });

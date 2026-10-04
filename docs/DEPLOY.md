@@ -183,6 +183,8 @@ secret-looking value appears in any page. Then by hand:
 
 Photos of resolved items (returned, donated, removed) are deleted after the
 school's retention period (default 7 days). The item row stays, without a photo.
+The same job forgets the optional contact email on claims that were rejected or
+picked up longer ago than that period (the claim itself stays, for the record).
 The job lives at `/api/cron/retention`, and `apps/web/vercel.json` schedules it
 for **10:00 UTC every day** (about 2 to 3 a.m. in California).
 
@@ -195,7 +197,7 @@ for **10:00 UTC every day** (about 2 to 3 a.m. in California).
   cron jobs can run at most once a day, and Vercel may run them any time within
   the scheduled hour. A daily job with a 7-day window doesn't need more.
 - **Check it ran:** Vercel → Project → Settings → Cron Jobs shows each run and
-  has a **Run** button. The response is just counts, e.g. `{"deleted":2,"failed":0}`.
+  has a **Run** button. The response is just counts, e.g. `{"deleted":2,"failed":0,"contactsCleared":1}`.
   Each deletion is also in the school's audit log as `photo.deleted`.
 - **Run it by hand** (e.g. locally): `curl -H "Authorization: Bearer $CRON_SECRET" <APP_URL>/api/cron/retention`.
 - Cron jobs only run on production deployments, not previews.

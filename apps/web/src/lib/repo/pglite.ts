@@ -557,5 +557,20 @@ function pgliteSystemRepo(asSystem: <T>(fn: (q: Q) => Promise<T>) => Promise<T>)
           [rows[0].school_id, itemId],
         );
       }),
+
+    clearClosedClaimContacts: (now) =>
+      asSystem(async (q) => {
+        const rows = await q(
+          `update public.claims c set contact_email = null
+             from public.schools s
+            where s.id = c.school_id
+              and c.contact_email is not null
+              and c.status in ('rejected', 'picked_up')
+              and coalesce(c.picked_up_at, c.reviewed_at) + make_interval(days => s.photo_retention_days) < $1
+            returning c.id`,
+          [now.toISOString()],
+        );
+        return rows.length;
+      }),
   };
 }

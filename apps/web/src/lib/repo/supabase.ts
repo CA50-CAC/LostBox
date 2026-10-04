@@ -538,5 +538,25 @@ function supabaseSystemRepo(db: SupabaseClient): SystemRepo {
           .insert({ school_id: cleared[0].school_id, actor_id: null, action: "photo.deleted", item_id: itemId, detail: { reason: "retention" } }),
       );
     },
+
+    async clearClosedClaimContacts(now) {
+      const DAY_MS = 24 * 60 * 60 * 1000;
+      const candidates = rows(
+        await db
+          .from("claims")
+          .select("id, picked_up_at, reviewed_at, schools(photo_retention_days)")
+          .not("contact_email", "is", null)
+          .in("status", ["rejected", "picked_up"]),
+      );
+      const ids = candidates
+        .filter((r) => {
+          const school = (Array.isArray(r.schools) ? r.schools[0] : r.schools) as { photo_retention_days: number };
+          const closed = r.picked_up_at ?? r.reviewed_at;
+          return closed != null && Date.parse(iso(closed)) + school.photo_retention_days * DAY_MS < now.getTime();
+        })
+        .map((r) => String(r.id));
+      if (ids.length === 0) return 0;
+      return rows(await db.from("claims").update({ contact_email: null }).in("id", ids).select("id")).length;
+    },
   };
 }
