@@ -1,3 +1,4 @@
+import { PrivacyLink } from "@/components/privacy-link";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Logo } from "@/components/logo";
@@ -36,6 +37,7 @@ export default async function StudentLayout({ children, params }: LayoutProps<"/
       </header>
       <main id="main" className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 pt-5 pb-28 md:pt-8 md:pb-12">
         {children}
+        <PrivacyLink className="mt-auto pt-2" />
       </main>
       <TabBar tabs={tabs} label={t("tabs.label")} hideOn="/items/" />
     </div>

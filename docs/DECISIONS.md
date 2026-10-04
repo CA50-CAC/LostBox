@@ -150,7 +150,11 @@ Found while reviewing `0001_init.sql` before its first push. Fixed in `0001` its
 
 ### 2026-10-01: Out of scope, as agreed
 
-AI matching, auto-fill, auto-blur, notifications, analytics, lost-item reports, the donate list, the retention job (the data-layer methods for it exist and are tested), logo upload, and location "nearby" links UI.
+AI matching, auto-fill, auto-blur, notifications, analytics, lost-item reports, logo upload, and location "nearby" links UI.
+
+
+
+
 
 ### 2026-10-04: Production readiness
 
@@ -159,6 +163,11 @@ AI matching, auto-fill, auto-blur, notifications, analytics, lost-item reports, 
 - **`pnpm smoke <url>`:** read-only HTTP checks after each deploy (public pages, anonymous visitors bounced from staff pages, `noindex`, no secret-looking strings in HTML). It changes nothing, so it's safe against production. Sign-in, email, and the claim loop stay a short manual checklist, because they need a real inbox.
 - **`pnpm db:push:dry`:** `supabase db push --dry-run`, so the exact migrations are listed before anything is applied.
 
+### 2026-10-04: Privacy page and pilot kit
+
+- **`/privacy`:** public, plain English, every string through `t()`. It covers what LostBox keeps (items, claims, hashed claim codes, staff emails, school settings, cookies, hashed rate-limit counters), what it never collects, how photos are used (the three visibility levels, wallets never Full, expiring photo links), who can see staff-only information, and retention. Each statement was checked against the code; if a rule changes, the page changes with it. It also says plainly that the people running LostBox can reach the database for maintenance.
+- **Links:** a small "Privacy" link at the bottom of the student shell, staff shell, setup wizard, sign-in pages, and home page, plus a row on the student Pickup tab. One shared component (`components/privacy-link.tsx`).
+- **`docs/PILOT.md`:** what LostBox does and collects, the daily staff workflow with time estimates (labelled as estimates; the survey measures the real number), a 10-minute walkthrough, a 3-question survey, and a pre-pilot checklist.
 ### 2026-10-04: QR codes and the print poster
 
 - **QR library: `uqr`** (MIT, no dependencies, maintained by the UnJS group). It only turns text into a grid; `lib/qr.ts` draws the grid as one black-on-white SVG path with the 4-square quiet zone scanners need, and error correction level M (survives about 15% damage, good for a poster on a wall). Alternatives: `qrcode` (pulls in `yargs` and `pngjs` for its CLI and PNG output, which we don't use), an online QR API (sends the join link to a third party, and breaks offline).

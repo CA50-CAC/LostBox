@@ -1,3 +1,4 @@
+import { PrivacyLink } from "@/components/privacy-link";
 import Link from "next/link";
 import { Alert } from "@/components/ui/alert";
 import { Icon } from "@/components/icons";
@@ -90,6 +91,7 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           </ul>
           <p className="px-1 text-sm text-muted">{t("home.staffLead")}</p>
         </section>
+        <PrivacyLink className="mt-auto pt-2" />
       </main>
     </div>
   );
