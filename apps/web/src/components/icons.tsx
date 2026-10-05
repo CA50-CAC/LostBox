@@ -84,6 +84,7 @@ const PATHS = {
       <path d="M8 11V8a4 4 0 0 1 8 0v3" />
     </>
   ),
+  chart: <path d="M5 20V10M12 20V4M19 20v-7M3 20h18" />,
 } satisfies Record<string, ReactNode>;
 
 export type IconName = keyof typeof PATHS;
