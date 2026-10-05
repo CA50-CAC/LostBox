@@ -13,11 +13,16 @@ import { filterItems, type SearchFilters } from "@/lib/domain/search";
 import type { StudentItem } from "@/lib/domain/visibility";
 import type { StudentRepo } from "@/lib/repo/interface";
 
-export async function searchItems(
-  students: StudentRepo,
-  query: string,
-  filters: SearchFilters = {},
-): Promise<{ ids: string[]; items: Map<string, StudentItem> }> {
+/** Ranked ids (best first) plus the items they refer to. */
+export interface SearchResult {
+  ids: string[];
+  items: Map<string, StudentItem>;
+}
+
+/** The shape every ranker must have: today's filter, the future matching engine, and the eval baselines. */
+export type SearchFn = (students: StudentRepo, query: string, filters?: SearchFilters) => Promise<SearchResult>;
+
+export async function searchItems(students: StudentRepo, query: string, filters: SearchFilters = {}): Promise<SearchResult> {
   const items = await students.listItems({
     categories: filters.categories,
     locationNames: filters.locationNames,

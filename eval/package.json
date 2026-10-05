@@ -1,0 +1,19 @@
+{
+  "name": "@lostbox/eval",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Search evaluation harness (SPEC Section 7). Aggregate results only go into git.",
+  "scripts": {
+    "eval": "tsx src/run.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^24",
+    "tsx": "4.23.15",
+    "typescript": "^5",
+    "vitest": "^5.0.2",
+    "zod": "^4.6.5"
+  }
+}
