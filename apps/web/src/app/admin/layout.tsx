@@ -23,8 +23,9 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
 
   const tabs: Tab[] = [
     { href: "/admin", label: t("nav.items"), icon: "grid", match: ["=/admin", "/admin/items/", "/admin/donate"], except: ["/admin/items/new"] },
-    { href: "/admin/items/new", label: t("nav.add"), icon: "plus", match: ["/admin/items/new"], primary: true },
     { href: "/admin/claims", label: t("nav.claims"), icon: "inbox", match: ["/admin/claims"], badge: pending },
+    { href: "/admin/items/new", label: t("nav.add"), icon: "plus", match: ["/admin/items/new"], primary: true },
+    { href: "/admin/stats", label: t("nav.stats"), icon: "chart", match: ["/admin/stats"] },
     { href: "/admin/settings", label: t("nav.settings"), icon: "gear", match: ["/admin/settings"] },
   ];
 
@@ -42,7 +43,7 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
               <p className="text-xs font-medium text-muted">{t("nav.staffArea")}</p>
             </div>
           </div>
-          <TopTabs tabs={tabs.map((tab) => (tab.primary ? { ...tab, label: t("nav.newItem"), primary: false } : tab))} label={t("nav.staffNav")} />
+          <TopTabs tabs={tabs.map((tab) => (tab.primary ? { ...tab, label: t("nav.newItem"), primary: false } : tab))} label={t("nav.staffNav")} compact />
           <form action={signOut} className="flex shrink-0 items-center gap-3">
             <span className="hidden text-sm text-muted xl:inline">{t("nav.signedInAs", { email: session.email })}</span>
             <button

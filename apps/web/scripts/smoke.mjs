@@ -69,7 +69,7 @@ await check("staff sign-in page loads and is noindex", async () => {
 });
 
 await check("staff pages send anonymous visitors to sign in", async () => {
-  for (const path of ["/admin", "/admin/claims", "/admin/donate", "/admin/settings"]) {
+  for (const path of ["/admin", "/admin/claims", "/admin/donate", "/admin/stats", "/admin/settings"]) {
     const { res } = await get(path);
     expect(isRedirectTo(res, "/login"), `${path}: expected a redirect to /login, got ${res.status} ${res.headers.get("location") ?? ""}`);
   }

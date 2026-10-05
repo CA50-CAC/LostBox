@@ -74,8 +74,12 @@ export function TabBar({ tabs, label, hideOn }: { tabs: Tab[]; label: string; hi
   );
 }
 
-/** The same tabs as top pills, for tablets and desktops. */
-export function TopTabs({ tabs, label }: { tabs: Tab[]; label: string }) {
+/**
+ * The same tabs as top pills, for tablets and desktops. `compact` shows icons
+ * only on tablet widths (labels stay for screen readers and as tooltips), for
+ * headers with many tabs.
+ */
+export function TopTabs({ tabs, label, compact = false }: { tabs: Tab[]; label: string; compact?: boolean }) {
   const pathname = usePathname();
   return (
     <nav aria-label={label} className="max-md:hidden">
@@ -87,12 +91,13 @@ export function TopTabs({ tabs, label }: { tabs: Tab[]; label: string }) {
               <Link
                 href={tab.href}
                 aria-current={active ? "page" : undefined}
-                className={`inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-[0.95rem] font-semibold whitespace-nowrap transition-colors ${
+                title={compact ? tab.label : undefined}
+                className={`inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-full px-4 text-[0.95rem] ${compact ? "max-lg:px-3" : ""} font-semibold whitespace-nowrap transition-colors ${
                   active ? "bg-accent-soft text-accent" : "text-muted hover:bg-surface hover:text-foreground"
                 }`}
               >
                 <Icon name={tab.icon} className="size-[1.1rem]" />
-                {tab.label}
+                <span className={compact ? "max-lg:sr-only" : undefined}>{tab.label}</span>
                 {tab.badge ? (
                   <span className="grid min-w-5 place-items-center rounded-full bg-accent px-1.5 py-0.5 text-xs font-bold text-accent-foreground">{tab.badge}</span>
                 ) : null}
