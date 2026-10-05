@@ -2,13 +2,18 @@
 
 import { useActionState, useState } from "react";
 import { rotateJoinCode } from "@/app/setup/actions";
-import { Button } from "@/components/ui/button";
+import { Button, buttonClass } from "@/components/ui/button";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { t } from "@/lib/i18n";
 import { EMPTY_FORM, type FormState } from "@/lib/server/forms";
 
-/** The school's join code and link, with a button for owners to replace the code. */
-export function JoinCodePanel({ code, appUrl, isOwner }: { code: string; appUrl: string; isOwner: boolean }) {
+/**
+ * The school's join code, link, and QR code, with a button for owners to
+ * replace the code. The QR image comes from /admin/join-qr, drawn on the
+ * server from the code in the database; `?v=` only makes the browser fetch it
+ * again after the code changes.
+ */
+export function JoinCodePanel({ code, appUrl, slug, schoolName, isOwner }: { code: string; appUrl: string; slug: string; schoolName: string; isOwner: boolean }) {
   const [state, action] = useActionState<FormState, FormData>(rotateJoinCode, EMPTY_FORM);
   const current = state.data?.code ?? code;
   const link = `${appUrl}/?code=${current}`;
@@ -35,6 +40,27 @@ export function JoinCodePanel({ code, appUrl, isOwner }: { code: string; appUrl:
           >
             {copied ? t("staff.copied") : t("staff.copy")}
           </Button>
+        </div>
+      </div>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        {/* eslint-disable-next-line @next/next/no-img-element -- a small server-made SVG; next/image adds nothing here */}
+        <img
+          src={`/admin/join-qr?v=${current}`}
+          alt={t("qr.alt", { school: schoolName })}
+          width={176}
+          height={176}
+          className="size-44 shrink-0 rounded-2xl border border-border bg-white p-2"
+        />
+        <div className="flex flex-col gap-2">
+          <p className="text-sm text-muted">{t("qr.help")}</p>
+          <div className="flex flex-wrap gap-2">
+            <a href={`/admin/join-qr?v=${current}&download=1`} download className={buttonClass("secondary")}>
+              {t("qr.download")}
+            </a>
+            <a href={`/s/${slug}/poster`} className={buttonClass("secondary")}>
+              {t("poster.open")}
+            </a>
+          </div>
         </div>
       </div>
       {isOwner ? (

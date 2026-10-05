@@ -33,7 +33,7 @@ export default async function SettingsPage() {
       {!isOwner ? <Alert tone="info">{t("admin.error.owner")}</Alert> : null}
 
       <Section id="access" title={t("settings.joinCode")}>
-        <JoinCodePanel code={school.joinCode} appUrl={appEnv().appUrl} isOwner={isOwner} />
+        <JoinCodePanel code={school.joinCode} appUrl={appEnv().appUrl} slug={school.slug} schoolName={school.name} isOwner={isOwner} />
       </Section>
 
       {isOwner ? (

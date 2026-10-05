@@ -150,7 +150,11 @@ Found while reviewing `0001_init.sql` before its first push. Fixed in `0001` its
 
 ### 2026-10-01: Out of scope, as agreed
 
-AI matching, auto-fill, auto-blur, notifications, analytics, lost-item reports, the poster page, logo upload, location "nearby" links UI, and QR codes on the launch screen.
+AI matching, auto-fill, auto-blur, notifications, analytics, lost-item reports, logo upload, and location "nearby" links UI.
+
+
+
+
 
 ### 2026-10-04: Production readiness
 
@@ -188,4 +192,9 @@ AI matching, auto-fill, auto-blur, notifications, analytics, lost-item reports, 
 - **Chart:** one series (returns per week) as HTML columns, not a chart library: crisp at phone width, keyboard-reachable values, a table view, and the app's accent color (contrast checked against both themes' card colors). Return rate is the one "hero" number; the rest are plain tiles.
 - **Demo history:** the seed adds 9 returned items (with picked-up claims) and 2 donated items over the last month, so the dashboard isn't empty in a demo. They're resolved (never shown to students) and have no photos.
 - **Navigation:** staff now have five tabs: Items, Claims, a raised Add in the middle, Impact, Settings. On tablet widths the top tabs show icons only (labels stay for screen readers and tooltips).
+### 2026-10-04: QR codes and the print poster
+
+- **QR library: `uqr`** (MIT, no dependencies, maintained by the UnJS group). It only turns text into a grid; `lib/qr.ts` draws the grid as one black-on-white SVG path with the 4-square quiet zone scanners need, and error correction level M (survives about 15% damage, good for a poster on a wall). Alternatives: `qrcode` (pulls in `yargs` and `pngjs` for its CLI and PNG output, which we don't use), an online QR API (sends the join link to a third party, and breaks offline).
+- **Always the current code.** The launch screen and settings show `<img src="/admin/join-qr?v=CODE">`. The route is staff-only and draws from the join code *in the database*; `?v=` is only a cache buster, so even a stale page can't show an old code's QR. The poster reads the database on every request too. A test rotates the code and checks the QR and poster follow it.
+- **Poster at `/s/[slug]/poster`:** staff of that school only (others get the sign-in page or a 404). It sits next to the student pages, so the student pages moved into a `(student)` route group (URLs unchanged) to keep their join-code layout off the poster. One US Letter page via `@page { size: letter; margin: 0.5in }`; print hides the toolbar and demo banner. The sheet is pure black on white in both themes. No PDF library: the browser's "Print / Save as PDF" does it.
 

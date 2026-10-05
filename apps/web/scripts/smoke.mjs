@@ -92,6 +92,11 @@ await check("the retention job refuses calls without the cron secret", async () 
   expect(res.status === 401, res.status === 503 ? "CRON_SECRET is not set on this deployment" : `status ${res.status}`);
 });
 
+await check("posters are staff-only", async () => {
+  const { res } = await get("/s/smoke-test-no-such-school/poster");
+  expect(isRedirectTo(res, "/login"), `expected a redirect to /login, got ${res.status}`);
+});
+
 await check("unsigned photo URLs are refused", async () => {
   const { res } = await get("/api/photos/00000000-0000-0000-0000-000000000000/x.jpg");
   expect(res.status === 404, `status ${res.status}`);

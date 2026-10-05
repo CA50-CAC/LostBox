@@ -111,6 +111,7 @@ again resets the demo school to the same state.
 | `/privacy` | everyone | what LostBox keeps and doesn't, in plain English |
 | `/s/[slug]` | students | gallery with search and filters; item pages; claim form |
 | `/s/[slug]/status` | students | check a claim with its code |
+| `/s/[slug]/poster` | staff | print-ready poster with the QR code and join code |
 | `/login`, `/auth/confirm` | staff | magic-link sign-in |
 | `/setup` | school admins | 7-step setup wizard (resumes where you left off) |
 | `/admin` | staff | items list; `/admin/items/new` intake; `/admin/claims` queue; `/admin/donate` ready to donate; `/admin/stats` impact dashboard; `/admin/settings` |
