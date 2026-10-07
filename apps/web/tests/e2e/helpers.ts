@@ -4,6 +4,14 @@ export const DEMO_STAFF = "demo@lostbox.test";
 export const DEMO_CODE = "DEMO2026";
 export const DEMO_SLUG = "demo-high-school";
 
+export const THEME_COOKIE = "lb_theme";
+export type ChosenTheme = "light" | "dark";
+
+/** Picks Light or Dark for a browser context by setting the theme cookie, as the toggle would. */
+export async function chooseTheme(context: BrowserContext, theme: ChosenTheme, baseURL = "http://localhost:3100") {
+  await context.addCookies([{ name: THEME_COOKIE, value: theme, url: baseURL }]);
+}
+
 type Cookies = Awaited<ReturnType<BrowserContext["cookies"]>>;
 const sessions = new Map<string, Cookies>();
 
@@ -30,7 +38,8 @@ export async function signIn(page: Page, email: string, next = "/admin") {
   await page.goto((await link.getAttribute("href"))!);
   await page.getByRole("button", { name: "Sign in" }).click();
   await page.waitForURL((u) => !u.pathname.startsWith("/auth") && !u.pathname.startsWith("/login"));
-  sessions.set(email, await page.context().cookies());
+  // Keep the session only; the theme cookie belongs to whichever test set it.
+  sessions.set(email, (await page.context().cookies()).filter((c) => c.name !== THEME_COOKIE));
 }
 
 export async function joinDemo(page: Page) {

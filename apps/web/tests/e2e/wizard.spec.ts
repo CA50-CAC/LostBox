@@ -34,7 +34,7 @@ test("a new admin sets up a school, leaves, comes back, and finishes", async ({ 
   await expect(page).toHaveURL(/\/setup\/6$/);
   await page.getByRole("button", { name: "Continue" }).click();
   await expect(page).toHaveURL(/\/setup\/7$/);
-  const code = (await page.locator("p.font-mono").textContent())!.trim();
+  const code = (await page.locator("p.code-text").textContent())!.trim();
   expect(code).toMatch(/^[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{8}$/);
   await page.getByRole("button", { name: /Launch/ }).click();
   await expect(page).toHaveURL(/\/admin$/);

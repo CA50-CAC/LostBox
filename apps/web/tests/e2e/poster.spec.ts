@@ -50,7 +50,7 @@ test("poster and QR show the current code, and follow a code rotation", async ({
 
   try {
     await page.getByRole("button", { name: "Make a new code" }).click();
-    const code = page.locator("p.font-mono");
+    const code = page.locator("p.code-text");
     await expect(code).not.toHaveText(DEMO_CODE);
     const fresh = (await code.textContent())!.trim();
 
