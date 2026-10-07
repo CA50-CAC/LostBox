@@ -32,7 +32,7 @@ export function WizardShell({
           <Logo />
           <span className="sr-only">{t("app.name")}</span>
         </Link>
-        <p className="rounded-full border border-border bg-card px-3 py-1 text-sm font-medium text-muted">{t("setup.stepOf", { step, total: TOTAL })}</p>
+        <p className="rounded-full bg-accent-soft px-3 py-1 text-sm font-semibold text-accent">{t("setup.stepOf", { step, total: TOTAL })}</p>
       </div>
 
       <nav aria-label={t("setup.progress")}>
@@ -48,12 +48,12 @@ export function WizardShell({
                 {n > 1 ? <span className={`absolute right-1/2 left-0 h-0.5 -translate-x-4 ${n <= step ? "bg-accent" : "bg-border"}`} /> : null}
                 {n < TOTAL ? <span className={`absolute right-0 left-1/2 h-0.5 translate-x-4 ${n < step ? "bg-accent" : "bg-border"}`} /> : null}
                 <span
-                  className={`relative grid size-8 place-items-center rounded-full text-sm font-bold transition-colors ${
+                  className={`relative grid size-8 place-items-center rounded-lg text-sm font-extrabold transition-colors ${
                     done
                       ? "bg-accent text-accent-foreground"
                       : current
-                        ? "bg-card text-accent ring-2 ring-accent ring-offset-2 ring-offset-background"
-                        : "border border-border bg-card text-muted"
+                        ? "bg-accent-soft text-accent ring-2 ring-accent ring-offset-2 ring-offset-background"
+                        : "bg-accent-soft text-muted"
                   }`}
                 >
                   {done ? (
@@ -89,7 +89,7 @@ export function WizardShell({
       </nav>
 
       <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h1>
+        <h1 className="text-3xl headline sm:text-4xl">{title}</h1>
         {lead ? <p className="text-lg text-muted">{lead}</p> : null}
       </div>
       {children}

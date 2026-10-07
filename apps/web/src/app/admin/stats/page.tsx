@@ -35,7 +35,7 @@ export default async function StatsPage({ searchParams }: PageProps<"/admin/stat
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-1">
-        <h1 className="text-3xl font-semibold tracking-tight">{t("stats.title")}</h1>
+        <h1 className="text-3xl headline">{t("stats.title")}</h1>
         <p className="max-w-2xl text-muted">{t("stats.lead", { school: school.name })}</p>
       </div>
 
@@ -49,7 +49,7 @@ export default async function StatsPage({ searchParams }: PageProps<"/admin/stat
                   href={`/admin/stats?range=${k}`}
                   aria-current={range.key === k ? "page" : undefined}
                   className={`inline-flex min-h-11 items-center rounded-xl px-3.5 text-sm font-medium whitespace-nowrap ${
-                    range.key === k ? "bg-foreground text-background" : "text-muted hover:bg-surface"
+                    range.key === k ? "bg-accent text-accent-foreground" : "text-muted hover:bg-accent-soft"
                   }`}
                 >
                   {t(`stats.range.${k}` as MessageKey)}
@@ -62,11 +62,11 @@ export default async function StatsPage({ searchParams }: PageProps<"/admin/stat
           <input type="hidden" name="range" value="custom" />
           <label className="flex min-w-0 flex-col gap-1 text-sm font-medium">
             {t("stats.from")}
-            <input type="date" name="from" required defaultValue={range.fromDay ?? ""} max={range.toDay} className="min-h-11 rounded-xl border border-border bg-card px-3" />
+            <input type="date" name="from" required defaultValue={range.fromDay ?? ""} max={range.toDay} className="min-h-11 rounded-xl border border-border-input bg-background px-3" />
           </label>
           <label className="flex min-w-0 flex-col gap-1 text-sm font-medium">
             {t("stats.to")}
-            <input type="date" name="to" required defaultValue={range.toDay} className="min-h-11 rounded-xl border border-border bg-card px-3" />
+            <input type="date" name="to" required defaultValue={range.toDay} className="min-h-11 rounded-xl border border-border-input bg-background px-3" />
           </label>
           <Button type="submit" variant={range.key === "custom" ? "primary" : "secondary"} className="col-span-2 sm:col-span-1">
             {t("stats.apply")}
@@ -136,7 +136,7 @@ function Tile({ label, value, unit, detail, href }: { label: string; value: stri
     <>
       <p className="text-sm font-medium text-muted">{label}</p>
       <p className="flex items-baseline gap-1.5">
-        <span className="text-3xl font-semibold tracking-tight tabular-nums">{value}</span>
+        <span className="text-3xl headline tabular-nums">{value}</span>
         {unit ? <span className="font-medium text-muted">{unit}</span> : null}
       </p>
       {detail ? <p className="text-sm text-muted">{detail}</p> : null}
@@ -144,7 +144,7 @@ function Tile({ label, value, unit, detail, href }: { label: string; value: stri
   );
   return href ? (
     <div className="card">
-      <Link href={href} className="flex h-full flex-col gap-1 rounded-[inherit] p-4 hover:bg-surface">
+      <Link href={href} className="flex h-full flex-col gap-1 rounded-[inherit] p-4 hover:bg-accent-soft">
         {body}
       </Link>
     </div>

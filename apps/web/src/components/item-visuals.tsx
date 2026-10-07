@@ -20,8 +20,8 @@ export function ColorChips({ colors }: { colors: Color[] }) {
   return (
     <ul className="flex flex-wrap gap-1.5" aria-label="Colors">
       {colors.map((c) => (
-        <li key={c} className="inline-flex items-center gap-1.5 rounded-full border border-border px-2 py-0.5 text-sm">
-          <span aria-hidden className="size-3 rounded-full border border-border" style={{ background: colorBackground(c) }} />
+        <li key={c} className="inline-flex items-center gap-1.5 rounded-full border border-border-tint bg-background px-2.5 py-0.5 text-sm font-medium">
+          <span aria-hidden className="size-3 rounded-full border border-border-input" style={{ background: colorBackground(c) }} />
           {t(`color.${c}`)}
         </li>
       ))}

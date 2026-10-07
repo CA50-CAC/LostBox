@@ -22,14 +22,14 @@ export function JoinCodePanel({ code, appUrl, slug, schoolName, isOwner }: { cod
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
         <p className="text-sm font-medium text-muted">{t("launch.joinCode")}</p>
-        <p aria-live="polite" className="font-mono text-4xl font-semibold tracking-[0.25em] text-accent sm:text-5xl">
+        <p aria-live="polite" className="text-4xl code-text text-accent sm:text-5xl">
           {current}
         </p>
       </div>
       <div className="flex flex-col gap-1">
         <p className="text-sm font-medium text-muted">{t("launch.link")}</p>
         <div className="flex flex-wrap items-center gap-2">
-          <code className="rounded-lg bg-surface px-2 py-1 text-sm break-all">{link}</code>
+          <code className="rounded-lg bg-background px-2 py-1 text-sm break-all">{link}</code>
           <Button
             type="button"
             variant="secondary"

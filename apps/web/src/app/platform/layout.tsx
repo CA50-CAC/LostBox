@@ -11,12 +11,12 @@ export const metadata: Metadata = { robots: { index: false, follow: false } };
 export default function PlatformLayout({ children }: LayoutProps<"/platform">) {
   return (
     <div className="flex flex-1 flex-col">
-      <header className="sticky top-0 z-20 border-b border-border bg-card/85 backdrop-blur-lg">
+      <header className="sticky top-0 z-20 border-b border-border bg-background/90 backdrop-blur-lg">
         <div className="mx-auto flex min-h-14 w-full max-w-4xl items-center justify-between gap-3 px-4 py-1.5">
           <Link href="/platform/schools" className="flex min-h-11 items-center gap-3 rounded-lg">
             <Logo withName={false} />
             <span className="flex flex-col">
-              <span className="leading-tight font-semibold">{t("app.name")}</span>
+              <span className="leading-tight font-extrabold tracking-[-0.03em]">{t("app.name")}</span>
               <span className="text-xs font-medium text-muted">{t("platform.area")}</span>
             </span>
           </Link>
@@ -25,7 +25,7 @@ export default function PlatformLayout({ children }: LayoutProps<"/platform">) {
               type="submit"
               aria-label={t("nav.signOut")}
               title={t("nav.signOut")}
-              className="grid size-11 place-items-center rounded-full text-muted hover:bg-surface hover:text-foreground"
+              className="grid size-11 place-items-center rounded-full text-muted hover:bg-accent-soft hover:text-foreground"
             >
               <Icon name="logout" className="size-5" />
             </button>

@@ -23,7 +23,7 @@ export function StaffPanel({ members, invites, isOwner }: { members: Member[]; i
           {members.map((m) => (
             <li key={m.userId} className="flex flex-wrap items-center justify-between gap-2 px-4 py-3">
               <span className="break-all">{m.email}</span>
-              <span className="rounded-full bg-surface px-2 py-0.5 text-sm text-muted">{m.role === "owner" ? "Owner" : "Staff"}</span>
+              <span className="rounded-full bg-border px-2 py-0.5 text-sm text-muted">{m.role === "owner" ? "Owner" : "Staff"}</span>
             </li>
           ))}
         </ul>

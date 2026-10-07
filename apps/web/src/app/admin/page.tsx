@@ -14,7 +14,7 @@ import { getStaffContext } from "@/lib/server/staff-context";
 import { listReadyToDonate } from "@/lib/services/donate";
 import { Icon } from "@/components/icons";
 
-const selectClass = "min-h-11 w-full rounded-xl border border-border bg-card px-3 shadow-xs md:w-auto";
+const selectClass = "min-h-11 w-full rounded-xl border border-border-input bg-background px-3 md:w-auto";
 
 export default async function ItemsPage({ searchParams }: PageProps<"/admin">) {
   const params = await searchParams;
@@ -44,7 +44,7 @@ export default async function ItemsPage({ searchParams }: PageProps<"/admin">) {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-3xl font-semibold tracking-tight">{t("items.title")}</h1>
+        <h1 className="text-3xl headline">{t("items.title")}</h1>
         <ButtonLink href="/admin/items/new" className="max-md:hidden">
           + {t("items.add")}
         </ButtonLink>
@@ -53,7 +53,7 @@ export default async function ItemsPage({ searchParams }: PageProps<"/admin">) {
       {params.removed ? <Alert tone="success">{t("status.removed")}.</Alert> : null}
       {params.error === "owner" ? <Alert tone="warning">{t("admin.error.owner")}</Alert> : null}
       {donate.items.length ? (
-        <Link href="/admin/donate" className="card flex min-h-14 items-center gap-3 px-4 py-3 font-semibold hover:bg-surface">
+        <Link href="/admin/donate" className="card flex min-h-14 items-center gap-3 px-4 py-3 font-semibold hover:bg-accent-soft">
           <span aria-hidden className="grid size-10 shrink-0 place-items-center rounded-xl bg-warning-soft text-warning">
             <Icon name="clock" className="size-5" />
           </span>
@@ -120,7 +120,7 @@ export default async function ItemsPage({ searchParams }: PageProps<"/admin">) {
             const pending = pendingByItem.get(item.id) ?? 0;
             return (
               <li key={item.id}>
-                <Link href={`/admin/items/${item.id}`} className="flex items-center gap-4 px-4 py-3 transition-colors hover:bg-surface">
+                <Link href={`/admin/items/${item.id}`} className="flex items-center gap-4 px-4 py-3 transition-colors hover:bg-accent-soft">
                   <Thumb item={item} url={urls[i]} />
                   <div className="flex min-w-0 flex-1 flex-col gap-1">
                     <p className="truncate font-medium">

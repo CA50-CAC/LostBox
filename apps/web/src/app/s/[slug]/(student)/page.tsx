@@ -32,8 +32,8 @@ export default async function GalleryPage({ params, searchParams }: PageProps<"/
   const filtering = Boolean(q || category || location || from || to);
   const moreFilters = Boolean(location || from || to);
   const chip = (active: boolean) =>
-    `inline-flex min-h-11 shrink-0 snap-start items-center gap-2 rounded-full border px-4 text-sm font-semibold whitespace-nowrap transition-colors ${
-      active ? "border-accent bg-accent text-accent-foreground" : "border-border bg-card text-foreground hover:border-accent/50 hover:bg-accent-soft"
+    `inline-flex min-h-11 shrink-0 snap-start items-center gap-2 rounded-full border px-4 text-sm font-bold whitespace-nowrap transition-colors ${
+      active ? "border-accent bg-accent text-accent-foreground" : "border-border-tint bg-background text-foreground hover:border-accent hover:bg-accent-soft"
     }`;
 
   const [{ ids, items }, locations] = await Promise.all([
@@ -51,7 +51,7 @@ export default async function GalleryPage({ params, searchParams }: PageProps<"/
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <h1 className="text-[1.75rem] leading-tight font-semibold tracking-tight sm:text-4xl">{t("gallery.title", { school: school.name })}</h1>
+        <h1 className="text-[2rem] leading-[1.1] headline sm:text-5xl">{t("gallery.title", { school: school.name })}</h1>
         <p className="text-muted max-sm:text-[0.95rem] sm:text-lg">{t("gallery.lead")}</p>
       </div>
 
@@ -77,20 +77,20 @@ export default async function GalleryPage({ params, searchParams }: PageProps<"/
               enterKeyHint="search"
               defaultValue={q}
               placeholder={t("gallery.search.placeholder")}
-              className={`${inputClass} min-h-12 rounded-2xl pl-12 text-base`}
+              className={`${inputClass} min-h-12 pl-12 text-base`}
               maxLength={100}
             />
           </div>
           <details className="group">
             <summary
               aria-label={moreFilters ? `${t("gallery.filters")} (${t("gallery.filtersOn")})` : t("gallery.filters")}
-              className="relative grid size-12 cursor-pointer list-none place-items-center rounded-2xl border border-border bg-card text-foreground shadow-xs hover:border-accent/50 group-open:border-accent group-open:bg-accent-soft group-open:text-accent [&::-webkit-details-marker]:hidden"
+              className="relative grid size-12 cursor-pointer list-none place-items-center rounded-xl border border-border-tint bg-background text-foreground hover:border-accent group-open:border-accent group-open:bg-accent-soft group-open:text-accent [&::-webkit-details-marker]:hidden"
             >
               <Icon name="sliders" className="size-5" />
-              {moreFilters ? <span aria-hidden className="absolute top-2.5 right-2.5 size-2 rounded-full bg-accent ring-2 ring-card" /> : null}
+              {moreFilters ? <span aria-hidden className="absolute top-2.5 right-2.5 size-2 rounded-full bg-accent ring-2 ring-background" /> : null}
             </summary>
-            <div className="card absolute inset-x-0 top-14 z-10 grid gap-3 p-4 shadow-xl sm:grid-cols-3">
-              <p className="font-semibold sm:col-span-3">{t("gallery.filters")}</p>
+            <div className="card absolute inset-x-0 top-14 z-10 grid gap-3 border border-border-tint p-4 sm:grid-cols-3">
+              <p className="font-bold sm:col-span-3">{t("gallery.filters")}</p>
               <label className="flex flex-col gap-1 text-sm font-medium">
                 {t("gallery.location")}
                 <select name="location" defaultValue={location} className={inputClass}>

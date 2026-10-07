@@ -68,7 +68,7 @@ export function WeeklyChart({ weeks, capped }: { weeks: WeekBucket[]; capped: bo
                   <span
                     aria-hidden
                     // Anchored toward the middle of the chart so it never sticks out past the edge.
-                    className={`pointer-events-none invisible absolute bottom-full z-10 mb-1 rounded-lg bg-foreground px-2 py-1 text-xs font-semibold whitespace-nowrap text-background shadow-md group-hover:visible group-focus-visible:visible ${
+                    className={`pointer-events-none invisible absolute bottom-full z-10 mb-1 rounded-lg bg-foreground px-2 py-1 text-xs font-semibold whitespace-nowrap text-background group-hover:visible group-focus-visible:visible ${
                       i < weeks.length / 2 ? "left-0" : "right-0"
                     }`}
                     style={{ bottom: `${(w.returned / top) * 100}%` }}

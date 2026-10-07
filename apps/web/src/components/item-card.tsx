@@ -39,10 +39,10 @@ export function ItemCard({
 
   const body = (
     <>
-      <div className="relative m-1.5 mb-0 overflow-hidden rounded-[0.9rem] bg-surface">
+      <div className="relative m-2 mb-0 overflow-hidden rounded-xl bg-accent-soft">
         {media}
         {item.visibility === "limited" ? (
-          <span className="absolute top-2 left-2 inline-flex items-center gap-1 rounded-full bg-card/95 px-2.5 py-1 text-xs font-semibold text-foreground shadow-sm">
+          <span className="absolute top-2 left-2 inline-flex items-center gap-1 rounded-full bg-highlight px-2.5 py-1 text-xs font-bold text-highlight-foreground">
             <svg aria-hidden viewBox="0 0 24 24" className="size-3.5" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" strokeLinejoin="round">
               <rect x="5" y="11" width="14" height="10" rx="2" />
               <path d="M8 11V8a4 4 0 0 1 8 0v3" />
@@ -52,7 +52,7 @@ export function ItemCard({
         ) : null}
       </div>
       <div className="flex flex-1 flex-col gap-1 p-3 sm:p-3.5">
-        <p className="flex items-start gap-1.5 leading-snug font-semibold">
+        <p className="flex items-start gap-1.5 leading-snug font-bold">
           <CategoryIcon category={item.category} className="mt-0.5 size-4 shrink-0 text-accent" />
           <span className="line-clamp-2">{title}</span>
         </p>
@@ -68,7 +68,7 @@ export function ItemCard({
           </span>
         </p>
         {item.hasNameLabel ? (
-          <p className="mt-1 self-start rounded-full bg-accent-soft px-2 py-0.5 text-xs font-semibold text-accent">{t("item.hasNameLabel")}</p>
+          <p className="mt-1 self-start rounded-lg bg-highlight px-2 py-0.5 text-xs font-bold text-highlight-foreground">{t("item.hasNameLabel")}</p>
         ) : null}
       </div>
     </>

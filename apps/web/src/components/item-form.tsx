@@ -93,7 +93,7 @@ export function ItemForm({
               <label
                 key={c}
                 className={`inline-flex min-h-11 items-center gap-2 rounded-full border px-3 has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-accent ${
-                  on ? "border-accent bg-accent-soft font-medium text-accent" : "border-border"
+                  on ? "border-accent bg-accent-soft font-medium text-accent" : "border-border-tint bg-background"
                 } ${full ? "opacity-50" : "cursor-pointer"}`}
               >
                 <input
@@ -105,7 +105,7 @@ export function ItemForm({
                   onChange={() => setColors(on ? colors.filter((x) => x !== c) : [...colors, c])}
                   className="sr-only"
                 />
-                <span aria-hidden className="size-4 rounded-full border border-border" style={{ background: colorBackground(c) }} />
+                <span aria-hidden className="size-4 rounded-full border border-border-input" style={{ background: colorBackground(c) }} />
                 {t(`color.${c}`)}
               </label>
             );
@@ -133,7 +133,7 @@ export function ItemForm({
 
       <TextArea id="note" name="note" label={t("intake.note")} help={t("intake.note.help")} optional={t("common.optional")} defaultValue={initial.note} maxLength={280} error={err("note")} />
 
-      <fieldset className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-4">
+      <fieldset className="flex flex-col gap-3 rounded-2xl border border-border-tint bg-background p-4">
         <legend className="px-1 font-medium">{t("intake.visibility")}</legend>
         <label className="flex min-h-11 items-center justify-between gap-4">
           <span>
@@ -160,7 +160,7 @@ export function ItemForm({
                 <label
                   key={v}
                   className={`flex min-h-11 flex-1 cursor-pointer flex-col justify-center rounded-xl border px-3 py-2 has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-accent ${
-                    visibility === v ? "border-accent bg-accent-soft" : "border-border"
+                    visibility === v ? "border-accent bg-accent-soft" : "border-border-tint bg-background"
                   } ${allowed ? "" : "cursor-not-allowed opacity-50"}`}
                 >
                   <input

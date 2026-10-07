@@ -87,7 +87,7 @@ export function PrivacyEditor({ mode, initial, backHref }: { mode: "wizard" | "s
                 aria-pressed={preset === p}
                 onClick={() => setDefaults({ ...PRESETS[p] })}
                 className={`flex min-h-11 flex-col items-start rounded-xl border p-3 text-left ${
-                  preset === p ? "border-accent bg-accent-soft ring-1 ring-accent" : "border-border bg-card shadow-xs hover:border-accent/50"
+                  preset === p ? "border-accent bg-accent-soft ring-1 ring-accent" : "border-border-tint bg-background hover:border-accent/50"
                 }`}
               >
                 <span className={`font-semibold ${preset === p ? "text-accent" : ""}`}>{t(`preset.${p}`)}</span>
@@ -105,7 +105,7 @@ export function PrivacyEditor({ mode, initial, backHref }: { mode: "wizard" | "s
                 <CategoryIcon category={c} className="size-5 text-muted" />
                 {t(`category.${c}`)}
               </span>
-              <div className="inline-flex self-start rounded-xl border border-border bg-surface p-1 sm:self-auto">
+              <div className="inline-flex self-start rounded-xl border border-border-tint bg-background p-1 sm:self-auto">
                 {VISIBILITIES.map((v) => {
                   const allowed = isAllowedVisibility(c, v);
                   const checked = defaults[c] === v;
@@ -156,7 +156,7 @@ export function PrivacyEditor({ mode, initial, backHref }: { mode: "wizard" | "s
           <select
             value={focus}
             onChange={(e) => setFocus(e.target.value as Category)}
-            className="min-h-11 rounded-xl border border-border bg-card px-3 shadow-xs"
+            className="min-h-11 rounded-xl border border-border-input bg-background px-3"
           >
             {CATEGORIES.map((c) => (
               <option key={c} value={c}>
@@ -184,7 +184,7 @@ export function PrivacyEditor({ mode, initial, backHref }: { mode: "wizard" | "s
                     <ItemCard item={view} />
                   </div>
                 ) : (
-                  <div className="flex aspect-[3/5] flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-border bg-surface p-2 text-center text-xs text-muted">
+                  <div className="flex aspect-[3/5] flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-border-tint bg-background p-2 text-center text-xs text-muted">
                     <svg aria-hidden viewBox="0 0 24 24" className="size-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.9 5.1A9.8 9.8 0 0 1 12 5c5 0 9 5 9 7a10.6 10.6 0 0 1-2.3 3.3M6.1 6.1C4 7.5 3 10 3 12c0 2 4 7 9 7a9.6 9.6 0 0 0 4.2-.9" />
                     </svg>
@@ -195,7 +195,7 @@ export function PrivacyEditor({ mode, initial, backHref }: { mode: "wizard" | "s
             );
           })}
         </div>
-        <p className="rounded-xl bg-surface px-3 py-2 text-sm">{t(`visibility.${defaults[focus]}.help`)}</p>
+        <p className="rounded-xl bg-background px-3 py-2 text-sm">{t(`visibility.${defaults[focus]}.help`)}</p>
       </aside>
     </form>
   );

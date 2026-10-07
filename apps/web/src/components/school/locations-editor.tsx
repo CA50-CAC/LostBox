@@ -51,7 +51,7 @@ export function LocationsEditor({ mode, initial, backHref }: { mode: "wizard" | 
                 disabled={added}
                 aria-pressed={added}
                 className={`min-h-11 rounded-full border px-4 font-medium ${
-                  added ? "border-accent bg-accent-soft text-accent" : "border-border hover:bg-surface"
+                  added ? "border-accent bg-accent-soft text-accent" : "border-border-tint bg-background hover:bg-accent-soft"
                 }`}
               >
                 {added ? "✓ " : "+ "}
@@ -100,7 +100,7 @@ export function LocationsEditor({ mode, initial, backHref }: { mode: "wizard" | 
           {t("locations.yours")} <span className="text-muted">({names.length})</span>
         </h3>
         {names.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-border p-4 text-muted">{t("locations.empty")}</p>
+          <p className="rounded-xl border border-dashed border-border-tint p-4 text-muted">{t("locations.empty")}</p>
         ) : (
           <ol className="card flex flex-col divide-y divide-border overflow-hidden">
             {names.map((n, i) => (
@@ -133,7 +133,7 @@ function IconButton({ label, children, ...props }: { label: string; children: Re
       type="button"
       aria-label={label}
       title={label}
-      className="inline-flex size-11 items-center justify-center rounded-lg text-lg text-muted hover:bg-surface hover:text-foreground disabled:opacity-30"
+      className="inline-flex size-11 items-center justify-center rounded-lg text-lg text-muted hover:bg-accent-soft hover:text-foreground disabled:opacity-30"
       {...props}
     >
       <span aria-hidden>{children}</span>

@@ -34,7 +34,7 @@ export default async function PlatformSchoolsPage({ searchParams }: PageProps<"/
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-1">
-        <h1 className="text-3xl font-semibold tracking-tight">{t("platform.title")}</h1>
+        <h1 className="text-3xl headline">{t("platform.title")}</h1>
         <p className="max-w-2xl text-muted">{t("platform.lead")}</p>
       </div>
 
@@ -46,7 +46,7 @@ export default async function PlatformSchoolsPage({ searchParams }: PageProps<"/
                 href={`/platform/schools?view=${v}`}
                 aria-current={v === view ? "page" : undefined}
                 className={`inline-flex min-h-11 items-center rounded-xl px-4 font-medium whitespace-nowrap ${
-                  v === view ? "bg-foreground text-background" : "text-muted hover:bg-surface"
+                  v === view ? "bg-accent text-accent-foreground" : "text-muted hover:bg-accent-soft"
                 }`}
               >
                 {t(`platform.tab.${v}` as MessageKey)}
@@ -81,7 +81,7 @@ function SchoolCard({ school, view }: { school: School & { ownerEmail: string | 
         <h2 id={`school-${school.id}`} className="text-lg font-semibold">
           {school.name}
         </h2>
-        <p className="font-mono text-sm text-muted">/s/{school.slug}</p>
+        <p className="text-sm font-medium text-muted">/s/{school.slug}</p>
       </div>
       <dl className="grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
         <div>

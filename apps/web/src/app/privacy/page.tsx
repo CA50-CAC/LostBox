@@ -32,7 +32,7 @@ const SECTIONS: Array<{ id: string; icon: IconName; title: MessageKey; points: M
 export default function PrivacyPage() {
   return (
     <div className="flex flex-1 flex-col">
-      <header className="border-b border-border/70 bg-background/85">
+      <header className="border-b border-border bg-background">
         <div className="mx-auto flex min-h-14 w-full max-w-2xl items-center px-4">
           <Link href="/" className="flex min-h-11 items-center gap-2 rounded-lg">
             <Logo />
@@ -42,7 +42,7 @@ export default function PrivacyPage() {
       </header>
       <main id="main" className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-8 px-4 py-8 sm:py-12">
         <div className="flex flex-col gap-3">
-          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{t("privacyPage.title")}</h1>
+          <h1 className="text-3xl headline sm:text-4xl">{t("privacyPage.title")}</h1>
           <p className="text-lg text-muted">{t("privacyPage.lead")}</p>
           <p className="text-sm text-muted">{t("privacyPage.updated")}</p>
         </div>
@@ -50,7 +50,7 @@ export default function PrivacyPage() {
         {SECTIONS.map((s) => (
           <section key={s.id} aria-labelledby={`privacy-${s.id}`} className="flex flex-col gap-3">
             <h2 id={`privacy-${s.id}`} className="flex items-center gap-3 text-xl font-semibold tracking-tight">
-              <span aria-hidden className="grid size-9 shrink-0 place-items-center rounded-xl bg-accent-soft text-accent">
+              <span aria-hidden className="grid size-9 shrink-0 place-items-center rounded-lg bg-accent-soft text-accent">
                 <Icon name={s.icon} className="size-5" />
               </span>
               {t(s.title)}

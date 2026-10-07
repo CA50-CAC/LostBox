@@ -36,7 +36,7 @@ export function TabBar({ tabs, label, hideOn }: { tabs: Tab[]; label: string; hi
   return (
     <nav
       aria-label={label}
-      className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-lg md:hidden"
+      className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-lg md:hidden"
     >
       <ul className="mx-auto flex max-w-md items-stretch justify-around px-2">
         {tabs.map((tab) => {
@@ -46,16 +46,16 @@ export function TabBar({ tabs, label, hideOn }: { tabs: Tab[]; label: string; hi
               <Link
                 href={tab.href}
                 aria-current={active ? "page" : undefined}
-                className={`relative flex min-h-16 flex-1 flex-col items-center justify-center gap-1 rounded-xl text-[0.7rem] font-semibold transition-colors ${
+                className={`relative flex min-h-16 flex-1 flex-col items-center justify-center gap-1 rounded-xl text-[0.7rem] font-bold transition-colors ${
                   active ? "text-accent" : "text-muted hover:text-foreground"
                 }`}
               >
                 {tab.primary ? (
-                  <span className="grid size-10 place-items-center rounded-full bg-accent text-accent-foreground shadow-md shadow-accent/30">
+                  <span className="grid size-10 place-items-center rounded-xl bg-accent text-accent-foreground">
                     <Icon name={tab.icon} className="size-5" strokeWidth={2.5} />
                   </span>
                 ) : (
-                  <span className={`grid h-7 w-12 place-items-center rounded-full transition-colors ${active ? "bg-accent-soft" : ""}`}>
+                  <span className={`grid h-7 w-12 place-items-center rounded-lg transition-colors ${active ? "bg-accent-soft" : ""}`}>
                     <Icon name={tab.icon} className="size-[1.35rem]" strokeWidth={active ? 2.25 : 1.9} />
                   </span>
                 )}
@@ -92,8 +92,8 @@ export function TopTabs({ tabs, label, compact = false }: { tabs: Tab[]; label: 
                 href={tab.href}
                 aria-current={active ? "page" : undefined}
                 title={compact ? tab.label : undefined}
-                className={`inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-full px-4 text-[0.95rem] ${compact ? "max-lg:px-3" : ""} font-semibold whitespace-nowrap transition-colors ${
-                  active ? "bg-accent-soft text-accent" : "text-muted hover:bg-surface hover:text-foreground"
+                className={`inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-xl px-4 text-[0.95rem] ${compact ? "max-lg:px-3" : ""} font-bold whitespace-nowrap transition-colors ${
+                  active ? "bg-accent-soft text-accent" : "text-muted hover:bg-accent-soft hover:text-foreground"
                 }`}
               >
                 <Icon name={tab.icon} className="size-[1.1rem]" />

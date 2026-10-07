@@ -64,7 +64,7 @@ export function PhotoInput({ currentUrl, error }: { currentUrl?: string | null; 
         {t("intake.photo")} <span className="font-normal text-muted">({t("common.optional")})</span>
       </span>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
-        <div className="flex aspect-square w-full max-w-48 items-center justify-center overflow-hidden rounded-2xl border border-dashed border-border bg-surface">
+        <div className="flex aspect-square w-full max-w-48 items-center justify-center overflow-hidden rounded-2xl border border-dashed border-border-tint bg-background">
           {shown ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={shown} alt="" className="size-full object-cover" />
@@ -78,7 +78,7 @@ export function PhotoInput({ currentUrl, error }: { currentUrl?: string | null; 
         <div className="flex flex-col gap-2">
           <label
             htmlFor={id}
-            className="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-xl border border-border bg-card px-4 font-semibold shadow-xs hover:bg-surface has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-accent"
+            className="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-xl border border-border-tint bg-background px-4 font-semibold hover:bg-accent-soft has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-accent"
           >
             {busy ? "…" : shown ? t("intake.photo.replace") : t("intake.photo.take")}
             <input

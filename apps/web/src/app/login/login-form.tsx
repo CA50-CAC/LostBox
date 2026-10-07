@@ -18,7 +18,7 @@ export function LoginForm({ next, demoEmail }: { next: string; demoEmail: string
           {t("login.sent.body", { email: state.email })}
         </Alert>
         {state.devLink ? (
-          <div className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-4">
+          <div className="flex flex-col gap-3 rounded-xl border border-border bg-background p-4">
             <p className="font-semibold">{t("login.devLink.title")}</p>
             <p className="text-sm text-muted">{t("login.devLink.body")}</p>
             <a href={state.devLink} className={buttonClass("primary")}>

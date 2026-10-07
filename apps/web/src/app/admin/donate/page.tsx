@@ -52,7 +52,7 @@ export default async function DonatePage({ searchParams }: PageProps<"/admin/don
           <Icon name="back" className="size-4" />
           {t("donate.back")}
         </Link>
-        <h1 className="text-3xl font-semibold tracking-tight">{t("donate.title")}</h1>
+        <h1 className="text-3xl headline">{t("donate.title")}</h1>
         <p className="max-w-2xl text-muted">{t("donate.lead", { days })}</p>
       </div>
 

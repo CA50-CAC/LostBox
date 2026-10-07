@@ -22,10 +22,10 @@ export function JoinForm({ initialCode = "" }: { initialCode?: string }) {
         spellCheck={false}
         maxLength={16}
         required
-        className={`${inputClass} min-h-14 px-4 text-center font-mono text-2xl tracking-[0.25em] uppercase placeholder:text-muted/60`}
+        className={`${inputClass} min-h-14 px-4 text-center text-2xl code-text placeholder:font-semibold placeholder:text-muted/70`}
         placeholder="ABCD2345"
       />
-      <SubmitButton pendingLabel={t("join.pending")} className="min-h-12 text-lg">
+      <SubmitButton pendingLabel={t("join.pending")} className="min-h-14 text-lg">
         {t("join.submit")}
       </SubmitButton>
     </form>

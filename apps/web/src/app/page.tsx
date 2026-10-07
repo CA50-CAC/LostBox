@@ -20,28 +20,32 @@ export default async function Home({ searchParams }: PageProps<"/">) {
   const demo = appEnv().demoMode;
 
   return (
-    <div className="hero-glow flex flex-1 flex-col">
-      <main id="main" className="mx-auto flex w-full max-w-md flex-1 flex-col gap-8 px-4 pt-10 pb-12 sm:pt-16">
+    <div className="flex flex-1 flex-col">
+      {/* Phones: one column. Desktops: the join card on the left, "how it works" and staff links on the right. */}
+      <main
+        id="main"
+        className="mx-auto grid w-full max-w-md flex-1 content-start gap-8 px-4 pt-10 pb-12 sm:pt-16 lg:max-w-5xl lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-x-16 lg:pt-24"
+      >
         <section aria-labelledby="join-title" className="flex flex-col gap-6">
-          <div className="flex flex-col items-center gap-4 text-center">
-            <span className="grid size-16 place-items-center rounded-[1.25rem] bg-card shadow-md ring-1 ring-border">
+          <div className="flex flex-col items-center gap-4 text-center lg:items-start lg:text-left">
+            <span className="grid size-16 place-items-center rounded-2xl bg-accent-soft">
               <span className="scale-125">
                 <Logo withName={false} />
               </span>
             </span>
-            <p className="rounded-full bg-accent-soft px-3 py-1 text-sm font-semibold text-accent">{t("home.eyebrow")}</p>
-            <h1 id="join-title" className="text-[2.1rem] leading-tight font-semibold tracking-tight sm:text-5xl">
+            <p className="rounded-full bg-highlight px-3 py-1 text-sm font-bold text-highlight-foreground">{t("home.eyebrow")}</p>
+            <h1 id="join-title" className="text-[2.5rem] leading-[1.05] headline sm:text-6xl">
               {t("home.title")}
             </h1>
             <p className="text-lg text-muted">{t("home.lead")}</p>
           </div>
           {params.join ? <Alert tone="info">{t("home.joinFirst")}</Alert> : null}
-          <div className="card flex flex-col gap-4 p-5">
+          <div className="card flex flex-col gap-4 p-5 sm:p-6">
             <JoinForm initialCode={code} />
             {demo && !code ? (
               <Link
                 href={`/?code=${DEMO_JOIN_CODE}`}
-                className="flex min-h-12 items-center justify-between gap-2 rounded-xl bg-surface px-4 text-sm font-medium text-muted hover:text-foreground"
+                className="flex min-h-12 items-center justify-between gap-2 rounded-xl bg-background px-4 text-sm font-semibold text-accent hover:bg-accent-soft"
               >
                 <span>{t("home.demoHint", { code: DEMO_JOIN_CODE })}</span>
                 <Icon name="chevron" className="size-4 shrink-0" />
@@ -50,18 +54,19 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           </div>
         </section>
 
+        <div className="flex flex-col gap-8">
         <section aria-labelledby="how-title" className="flex flex-col gap-3">
-          <h2 id="how-title" className="px-1 text-sm font-semibold tracking-wide text-muted uppercase">
+          <h2 id="how-title" className="px-1 text-sm font-bold tracking-wide text-muted uppercase">
             {t("home.how")}
           </h2>
-          <ol className="card flex flex-col gap-4 p-4">
+          <ol className="card flex flex-col gap-5 p-5">
             {STEPS.map((n) => (
               <li key={n} className="flex gap-3">
-                <span aria-hidden className="grid size-8 shrink-0 place-items-center rounded-full bg-accent text-sm font-bold text-accent-foreground">
+                <span aria-hidden className="grid size-10 shrink-0 place-items-center rounded-lg bg-accent-soft font-extrabold text-accent">
                   {n}
                 </span>
                 <div>
-                  <p className="font-semibold">{t(`home.how.${n}.title` as MessageKey)}</p>
+                  <p className="font-bold">{t(`home.how.${n}.title` as MessageKey)}</p>
                   <p className="text-sm text-muted">{t(`home.how.${n}.body` as MessageKey)}</p>
                 </div>
               </li>
@@ -70,19 +75,19 @@ export default async function Home({ searchParams }: PageProps<"/">) {
         </section>
 
         <section aria-labelledby="staff-title" className="flex flex-col gap-3">
-          <h2 id="staff-title" className="px-1 text-sm font-semibold tracking-wide text-muted uppercase">
+          <h2 id="staff-title" className="px-1 text-sm font-bold tracking-wide text-muted uppercase">
             {t("home.forStaff")}
           </h2>
           <ul className="card divide-y divide-border overflow-hidden">
             <li>
-              <Link href="/login" className="flex min-h-14 items-center gap-3 px-4 font-semibold hover:bg-surface">
+              <Link href="/login" className="flex min-h-14 items-center gap-3 px-4 font-semibold hover:bg-accent-soft">
                 <Icon name="key" className="size-5 text-accent" />
                 <span className="flex-1">{t("home.staffSignIn")}</span>
                 <Icon name="chevron" className="size-5 text-muted" />
               </Link>
             </li>
             <li>
-              <Link href="/setup" className="flex min-h-14 items-center gap-3 px-4 font-semibold hover:bg-surface">
+              <Link href="/setup" className="flex min-h-14 items-center gap-3 px-4 font-semibold hover:bg-accent-soft">
                 <Icon name="school" className="size-5 text-accent" />
                 <span className="flex-1">{t("home.setup")}</span>
                 <Icon name="chevron" className="size-5 text-muted" />
@@ -91,7 +96,8 @@ export default async function Home({ searchParams }: PageProps<"/">) {
           </ul>
           <p className="px-1 text-sm text-muted">{t("home.staffLead")}</p>
         </section>
-        <PrivacyLink className="mt-auto pt-2" />
+        </div>
+        <PrivacyLink className="mt-auto pt-2 lg:col-span-2" />
       </main>
     </div>
   );

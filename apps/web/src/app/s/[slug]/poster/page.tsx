@@ -65,7 +65,7 @@ export default async function PosterPage({ params }: PageProps<"/s/[slug]/poster
 
         <div className="flex flex-col items-center gap-1">
           <p className="text-[clamp(0.85rem,2vw,1.1rem)] font-semibold tracking-widest uppercase print:text-[12pt]">{t("poster.code")}</p>
-          <p className="font-mono text-[clamp(2rem,7vw,3.75rem)] leading-none font-bold tracking-[0.2em] print:text-[44pt]">{school.joinCode}</p>
+          <p className="text-[clamp(2rem,7vw,3.75rem)] leading-none code-text print:text-[44pt]">{school.joinCode}</p>
           <p className="mt-1 text-[clamp(0.85rem,2vw,1.1rem)] print:text-[12pt]">{t("poster.orVisit", { host })}</p>
         </div>
 

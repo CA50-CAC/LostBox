@@ -5,7 +5,7 @@
 import type { ComponentProps, ReactNode } from "react";
 
 export const inputClass =
-  "block w-full min-h-11 rounded-xl border border-border bg-card px-3.5 py-2 text-base text-foreground shadow-xs transition-colors placeholder:text-muted/80 hover:border-muted/40 focus:border-accent aria-[invalid=true]:border-danger";
+  "block w-full min-h-11 rounded-xl border border-border-input bg-background px-3.5 py-2 text-base text-foreground transition-colors placeholder:text-muted/80 hover:border-accent focus:border-accent aria-[invalid=true]:border-danger";
 
 interface FieldProps {
   id: string;

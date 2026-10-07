@@ -1,54 +1,96 @@
 @import "tailwindcss";
 
 /*
- * Design tokens. One accent color (teal), calm neutrals, light and dark themes.
- * Layers: the page is `background` (a soft off-white), content sits on raised
- * white `card`s with a soft shadow, and `surface` is a quiet fill inside cards.
- * Contrast targets: body text and the accent on the background both meet WCAG AA.
- *   light: accent #0f766e on #ffffff ≈ 5.5:1
- *   dark:  accent #5eead4 on #0b1215 ≈ 12.8:1
- * Status colors (danger, success, warning) are used as text on their own
- * "-soft" background and on the page background; each pair meets 4.5:1
- * (checked by src/app/contrast.test.ts).
+ * Design tokens: "Campus Bright". White page, navy text, one cobalt accent,
+ * and a small yellow highlight for badges. Dark mode is navy, not black.
+ *
+ * Layers: the page is `background`; content sits in flat tinted panels
+ * (`card`, same color as `surface`) with no shadow; form fields inside a panel
+ * are `background` again so they stand out.
+ *
+ * Borders: `border` is a divider, `border-tint` is a decorative panel or chip
+ * edge, and `border-input` outlines form fields (the only one that has to
+ * reach 3:1, because the outline is how you find the field).
+ *
+ * Themes (see src/lib/theme.ts):
+ *   - "System" (no data-theme on <html>): the media query below picks.
+ *   - "Light" / "Dark": the server puts data-theme on <html> from a cookie, so
+ *     the first paint is already right. No script, no flash.
+ * The dark values appear twice (CSS has no way to share them between a media
+ * query and an attribute selector). src/app/contrast.test.ts fails if the two
+ * copies ever differ, and checks every text/background pair for WCAG AA.
  */
 :root {
-  --background: #f6f7f6;
-  --card: #ffffff;
-  --surface: #eff2f1;
-  --foreground: #0f1a1d;
-  --muted: #526068;
-  --border: #e0e6e4;
-  --accent: #0f766e;
+  color-scheme: light;
+  --background: #ffffff;
+  --card: #f3f6fd;
+  --surface: #f3f6fd;
+  --foreground: #10213a;
+  --muted: #4a5568;
+  --border: #e3e8f4;
+  --border-tint: #c9d5f5;
+  --border-input: #7483b8;
+  --accent: #2f5bea;
   --accent-foreground: #ffffff;
-  --accent-soft: #e2f2ef;
-  --shadow-color: 180 20% 20%;
-  --danger: #b42318;
-  --danger-soft: #fdecea;
-  --success: #166534;
-  --success-soft: #e8f5ec;
-  --warning: #a15c07;
-  --warning-soft: #fdf3e1;
+  --accent-soft: #e6ecfc;
+  --highlight: #ffd23f;
+  --highlight-foreground: #10213a;
+  --danger: #b3261e;
+  --danger-soft: #fce9e9;
+  --success: #12683a;
+  --success-soft: #e2f4ea;
+  --warning: #8a4a00;
+  --warning-soft: #fff3cc;
 }
 
+/* Dark, chosen by the device ("System"). Keep in sync with the block below. */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a1013;
-    --card: #11191d;
-    --surface: #182328;
-    --foreground: #ecf1f2;
-    --muted: #9aa8ae;
-    --border: #233137;
-    --accent: #5eead4;
-    --accent-foreground: #04201d;
-    --accent-soft: #11302c;
-    --shadow-color: 200 40% 2%;
-    --danger: #f97066;
-    --danger-soft: #3a1714;
-    --success: #4ade80;
-    --success-soft: #10291a;
-    --warning: #fbbf24;
-    --warning-soft: #33260a;
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --background: #0b1424;
+    --card: #13203a;
+    --surface: #13203a;
+    --foreground: #eef2fa;
+    --muted: #a3afc4;
+    --border: #1e2c47;
+    --border-tint: #2a3a5c;
+    --border-input: #6f82b5;
+    --accent: #6e8eff;
+    --accent-foreground: #0b1424;
+    --accent-soft: #1b2b52;
+    --highlight: #ffd23f;
+    --highlight-foreground: #10213a;
+    --danger: #ff8f87;
+    --danger-soft: #3b1a24;
+    --success: #5bd896;
+    --success-soft: #11322d;
+    --warning: #ffd23f;
+    --warning-soft: #33290f;
   }
+}
+
+/* Dark, chosen by the person. Keep in sync with the block above. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #0b1424;
+  --card: #13203a;
+  --surface: #13203a;
+  --foreground: #eef2fa;
+  --muted: #a3afc4;
+  --border: #1e2c47;
+  --border-tint: #2a3a5c;
+  --border-input: #6f82b5;
+  --accent: #6e8eff;
+  --accent-foreground: #0b1424;
+  --accent-soft: #1b2b52;
+  --highlight: #ffd23f;
+  --highlight-foreground: #10213a;
+  --danger: #ff8f87;
+  --danger-soft: #3b1a24;
+  --success: #5bd896;
+  --success-soft: #11322d;
+  --warning: #ffd23f;
+  --warning-soft: #33290f;
 }
 
 @theme inline {
@@ -58,23 +100,30 @@
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-border: var(--border);
+  --color-border-tint: var(--border-tint);
+  --color-border-input: var(--border-input);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent-soft: var(--accent-soft);
+  --color-highlight: var(--highlight);
+  --color-highlight-foreground: var(--highlight-foreground);
   --color-danger: var(--danger);
   --color-danger-soft: var(--danger-soft);
   --color-success: var(--success);
   --color-success-soft: var(--success-soft);
   --color-warning: var(--warning);
   --color-warning-soft: var(--warning-soft);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-jakarta);
+  /* Shapes: 12px small icon tiles (rounded-lg), 14px inputs and buttons (rounded-xl), 20px panels (rounded-2xl and up). */
+  --radius-lg: 0.75rem;
+  --radius-xl: 0.875rem;
+  --radius-2xl: 1.25rem;
+  --radius-3xl: 1.25rem;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-feature-settings: "ss01", "cv11";
 }
 
 h1,
@@ -83,39 +132,32 @@ h3 {
   text-wrap: balance;
 }
 
-/*
- * A raised panel: white on the soft page background, hairline border, and a
- * soft two-layer shadow. Most content (forms, lists, item cards) sits in one.
- */
-@utility card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 1.25rem;
-  box-shadow:
-    0 1px 2px hsl(var(--shadow-color) / 0.06),
-    0 4px 16px -4px hsl(var(--shadow-color) / 0.08);
+/* Page titles: extra bold and tight, the "school spirit" voice of the design. */
+@utility headline {
+  font-weight: 800;
+  letter-spacing: -0.03em;
 }
 
-/* A card that lifts a little on hover (only for links; motion is reduced below). */
+/* A flat tinted panel. Most content (forms, lists, item cards) sits in one. */
+@utility card {
+  background: var(--card);
+  border-radius: 1.25rem;
+}
+
+/* A panel that reacts on hover (only for links). Color only, so nothing moves. */
 @utility card-hover {
-  transition:
-    transform 160ms ease,
-    box-shadow 160ms ease,
-    border-color 160ms ease;
+  transition: background-color 160ms ease;
   &:hover {
-    transform: translateY(-2px);
-    border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
-    box-shadow:
-      0 2px 4px hsl(var(--shadow-color) / 0.06),
-      0 12px 28px -8px hsl(var(--shadow-color) / 0.18);
+    background: var(--accent-soft);
   }
 }
 
-/* A soft accent glow behind hero sections. Decorative only. */
-@utility hero-glow {
-  background:
-    radial-gradient(60% 50% at 50% 0%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 70%),
-    var(--background);
+/* Join codes and claim codes: big, bold, and spaced out so they're easy to read aloud and copy. */
+@utility code-text {
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
 }
 
 /* One visible focus style everywhere, for keyboard users. */
@@ -130,8 +172,8 @@ h3 {
   50% { opacity: 0.55; }
 }
 .skeleton {
-  background: var(--border);
-  border-radius: 0.75rem;
+  background: var(--accent-soft);
+  border-radius: 0.875rem;
   animation: skeleton-pulse 1.4s ease-in-out infinite;
 }
 

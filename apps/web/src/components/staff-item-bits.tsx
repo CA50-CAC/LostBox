@@ -6,8 +6,8 @@ import { CategoryTile } from "./item-visuals";
 const STATUS_STYLE: Record<ItemStatus, string> = {
   available: "bg-success-soft text-success",
   claimed: "bg-accent-soft text-accent",
-  returned: "bg-surface text-muted",
-  donated: "bg-surface text-muted",
+  returned: "bg-border text-muted",
+  donated: "bg-border text-muted",
   removed: "bg-danger-soft text-danger",
 };
 
@@ -16,7 +16,7 @@ export function StatusBadge({ status }: { status: ItemStatus }) {
 }
 
 export function VisibilityBadge({ visibility }: { visibility: Visibility }) {
-  const style = visibility === "staff_only" ? "border-warning/40 bg-warning-soft text-warning" : "border-border bg-card text-muted";
+  const style = visibility === "staff_only" ? "border-warning/40 bg-warning-soft text-warning" : "border-border-tint bg-background text-muted";
   return (
     <span className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-sm font-medium ${style}`}>
       {visibility === "staff_only" ? <span aria-hidden>🔒</span> : null}

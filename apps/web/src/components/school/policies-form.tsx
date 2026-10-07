@@ -75,7 +75,7 @@ export function PoliciesForm({ mode, initial, backHref }: { mode: "wizard" | "se
             <span className="block text-sm text-muted">{t("policies.verification.inPerson.help")}</span>
           </span>
         </label>
-        <label className="flex items-start gap-3 rounded-xl border border-border bg-surface p-3 text-muted">
+        <label className="flex items-start gap-3 rounded-xl border border-border bg-background p-3 text-muted">
           <input type="radio" name="verification" value="login" disabled className="mt-1 size-5" />
           <span>{t("policies.verification.login")}</span>
         </label>

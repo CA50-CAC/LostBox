@@ -36,7 +36,7 @@ export function DonateForm({ rows, action }: { rows: DonateRow[]; action: (form:
   return (
     <form action={action} className="flex flex-col gap-4">
       <div className="card overflow-hidden">
-        <label className="flex min-h-14 cursor-pointer items-center gap-3 border-b border-border bg-surface/60 px-4 font-semibold">
+        <label className="flex min-h-14 cursor-pointer items-center gap-3 border-b border-border bg-accent-soft/60 px-4 font-semibold">
           <input
             type="checkbox"
             className="size-5 accent-[var(--accent)]"
@@ -54,7 +54,7 @@ export function DonateForm({ rows, action }: { rows: DonateRow[]; action: (form:
         <ul className="divide-y divide-border">
           {rows.map((row) => (
             <li key={row.id}>
-              <label className="flex cursor-pointer items-center gap-4 px-4 py-3 hover:bg-surface">
+              <label className="flex cursor-pointer items-center gap-4 px-4 py-3 hover:bg-accent-soft">
                 <input
                   type="checkbox"
                   name="itemId"
@@ -90,7 +90,7 @@ export function DonateForm({ rows, action }: { rows: DonateRow[]; action: (form:
         <div className="sticky bottom-24 z-10 md:bottom-4">
           <Button
             type="button"
-            className="w-full shadow-lg md:w-auto"
+            className="w-full md:w-auto"
             disabled={selected.size === 0}
             onClick={() => {
               setConfirming(true);

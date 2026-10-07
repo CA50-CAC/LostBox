@@ -45,7 +45,7 @@ export default async function ItemPage({ params, searchParams }: PageProps<"/adm
           ← {t("edit.backToItems")}
         </Link>
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-3xl font-semibold tracking-tight">{t(`category.${item.category}`)}</h1>
+          <h1 className="text-3xl headline">{t(`category.${item.category}`)}</h1>
           <StatusBadge status={item.status} />
           <VisibilityBadge visibility={item.visibility} />
         </div>
@@ -81,7 +81,7 @@ export default async function ItemPage({ params, searchParams }: PageProps<"/adm
                 <ItemCard item={studentView} timeZone={school.timeZone} />
               </div>
             ) : (
-              <p className="rounded-xl border border-dashed border-border p-4 text-muted">{t("edit.studentView.hidden")}</p>
+              <p className="rounded-xl border border-dashed border-border-tint p-4 text-muted">{t("edit.studentView.hidden")}</p>
             )}
             <form action={setItemPrivate}>
               <input type="hidden" name="itemId" value={item.id} />

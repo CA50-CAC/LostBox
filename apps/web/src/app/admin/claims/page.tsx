@@ -42,7 +42,7 @@ export default async function ClaimsPage({ searchParams }: PageProps<"/admin/cla
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-1">
-        <h1 className="text-3xl font-semibold tracking-tight">{t("claims.title")}</h1>
+        <h1 className="text-3xl headline">{t("claims.title")}</h1>
         <p className="max-w-3xl text-muted">{t("claims.lead")}</p>
       </div>
 
@@ -54,7 +54,7 @@ export default async function ClaimsPage({ searchParams }: PageProps<"/admin/cla
                 href={`/admin/claims?view=${v}`}
                 aria-current={v === view ? "page" : undefined}
                 className={`inline-flex min-h-11 items-center rounded-xl px-4 font-medium whitespace-nowrap ${
-                  v === view ? "bg-foreground text-background" : "text-muted hover:bg-surface"
+                  v === view ? "bg-accent text-accent-foreground" : "text-muted hover:bg-accent-soft"
                 }`}
               >
                 {t(`claims.tab.${v}` as MessageKey)}
@@ -135,7 +135,7 @@ function ClaimCard({ claim, item, photoUrl, view, timeZone }: { claim: Claim; it
 
       <section className="flex flex-col gap-3 md:order-1">
         <h2 className="text-sm font-semibold text-muted uppercase">{t("claims.studentSays")}</h2>
-        <blockquote className="rounded-xl bg-surface p-4 text-lg">“{claim.claimantDetail}”</blockquote>
+        <blockquote className="rounded-xl bg-background p-4 text-lg">“{claim.claimantDetail}”</blockquote>
         <p className="text-sm text-muted">
           {t("claims.sent", { when: formatDateTime(claim.createdAt, timeZone) })} · {t("claims.contact")}: {claim.contactEmail ?? t("claims.noContact")}
         </p>

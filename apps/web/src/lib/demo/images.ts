@@ -10,7 +10,9 @@
 import type { Category, Color } from "@/lib/domain/types";
 import { CATEGORY_ICON, COLOR_HEX } from "@/lib/domain/visuals";
 
-const BACKGROUNDS = ["#eef2f3", "#f3efe8", "#e9eef6", "#f1ecf4", "#eaf3ee"];
+// Pale backdrops, a step deeper than the app's tinted panels so the picture
+// reads as a photo on both the light and the dark theme.
+const BACKGROUNDS = ["#dfe7fb", "#e9e3f8", "#dcecf7", "#f7ecd6", "#e0f1e7"];
 
 /** A small stable hash so the same inputs always draw the same picture. */
 function hash(s: string): number {
